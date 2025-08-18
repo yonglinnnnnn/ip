@@ -8,16 +8,19 @@ public class MegaBot {
                 "____________________________________________________________\n\n";
         System.out.println(intro);
         Scanner scanner = new Scanner(System.in);
-        String userInput = "";
+        String userInput = scanner.nextLine(); // Reads a String;
 
         while (!userInput.equals("bye")) {
-            userInput = scanner.nextLine(); // Reads a String
             System.out.print("     ____________________________________________________________\n");
 
             System.out.println("     " + userInput);
-            System.out.print("     ____________________________________________________________\n");
+            System.out.println("     ____________________________________________________________\n");
+            userInput = scanner.nextLine();
         }
 
+        System.out.println("    ____________________________________________________________\n" +
+                "    Bye. Hope to see you again soon!\n" +
+                "    ____________________________________________________________");
         scanner.close();
 
     }
