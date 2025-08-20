@@ -1,21 +1,26 @@
 public class Task {
     String task;
-    Boolean isCompleted;
+    Boolean isDone;
 
     public Task(String task) {
         this.task = task;
-        this.isCompleted = false;
+        this.isDone = false;
     }
 
-    public void setIsCompleted() {
-        this.isCompleted = true;
+    public void markAsDone() {
+        this.isDone = true;
+    }
+
+    public void markAsUndone() {
+        this.isDone = false;
+    }
+
+    public String getStatusIcon() {
+        return (this.isDone ? "[X]" : "[ ]");
     }
 
     @Override
     public String toString() {
-        String str = isCompleted ? "[X]" : "[ ]";
-        str += " " + this.task;
-
-        return str;
+        return getStatusIcon() + " " + this.task;
     }
 }

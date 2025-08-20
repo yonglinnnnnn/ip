@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MegaBot {
-   public static String[] tasksArray = new String[100];
+   public static Task[] tasksArray = new Task[100];
    public static int arrCount = 0;
 
 
@@ -21,6 +21,16 @@ public class MegaBot {
             if (userInput.equals("list")) {
                 // for each item in the arr, print it out
                 printTasksArray();
+            } else if (userInput.contains("unmark")) {
+                // call markAsUndone
+                String[] str = userInput.split(" ");
+                Integer i = Integer.parseInt(str[1]);
+                setTaskUndone(i);
+            } else if (userInput.contains("mark")) {
+                // call markAsDone
+                String[] str = userInput.split(" ");
+                Integer i = Integer.parseInt(str[1]);
+                setTaskDone(i);
             } else {
                 // implement save to arr
                 saveTasksToArray(userInput);
@@ -36,6 +46,18 @@ public class MegaBot {
         scanner.close();
     }
 
+    public static void setTaskDone(Integer i) {
+        tasksArray[i - 1].markAsDone();
+        System.out.println("     Nice! I've marked this task as done:\n");
+        System.out.println("     " + tasksArray[i - 1]);
+    }
+
+    public static void setTaskUndone(Integer i) {
+        tasksArray[i - 1].markAsUndone();
+        System.out.println("     OK, I've marked this task as not done yet:\n");
+        System.out.println("     " + tasksArray[i - 1]);
+    }
+
     public static void printTasksArray() {
         for (int i = 0; i < arrCount; i++) {
             System.out.println("     " + (i+1) + "." + tasksArray[i]);
@@ -43,8 +65,9 @@ public class MegaBot {
     }
 
     public static void saveTasksToArray(String task) {
-        tasksArray[arrCount] = task;
+        Task t = new Task(task);
+        tasksArray[arrCount] = t;
         arrCount++;
-        System.out.println("     added: " + task);
+        System.out.println("     added: " + t);
     }
 }
