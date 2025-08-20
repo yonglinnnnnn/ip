@@ -1,6 +1,11 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MegaBot {
+   public static String[] tasksArray = new String[100];
+   public static int arrCount = 0;
+
+
     public static void main(String[] args) {
         String intro = "____________________________________________________________\n" +
                 "Hello! I'm MegaBot\n" +
@@ -13,7 +18,14 @@ public class MegaBot {
         while (!userInput.equals("bye")) {
             System.out.print("     ____________________________________________________________\n");
 
-            System.out.println("     " + userInput);
+            if (userInput.equals("list")) {
+                // for each item in the arr, print it out
+                printTasksArray();
+            } else {
+                // implement save to arr
+                saveTasksToArray(userInput);
+            }
+
             System.out.println("     ____________________________________________________________\n");
             userInput = scanner.nextLine();
         }
@@ -22,6 +34,17 @@ public class MegaBot {
                 "    Bye. Hope to see you again soon!\n" +
                 "    ____________________________________________________________");
         scanner.close();
+    }
 
+    public static void printTasksArray() {
+        for (int i = 0; i < arrCount; i++) {
+            System.out.println("     " + (i+1) + "." + tasksArray[i]);
+        }
+    }
+
+    public static void saveTasksToArray(String task) {
+        tasksArray[arrCount] = task;
+        arrCount++;
+        System.out.println("     added: " + task);
     }
 }
