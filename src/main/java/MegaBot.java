@@ -2,119 +2,153 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MegaBot {
-   public static Task[] tasksArray = new Task[100];
-   public static int arrCount = 0;
+    public static Task[] tasksArray = new Task[100];
+    public static int arrCount = 0;
 
 
-    public static void main(String[] args) {
-        String intro = "____________________________________________________________\n" +
-                "Hello! I'm MegaBot\n" +
-                "What can I do for you?\n" +
-                "____________________________________________________________\n\n";
+    public static void main(String[] args) throws InvalidTaskException {
+        printDivider();
+        String intro = "Hello! I'm MegaBot\n" +
+                "What can I do for you?\n";
         System.out.println(intro);
+        printDivider();
+        System.out.println();
+
         Scanner scanner = new Scanner(System.in);
         String userInput = scanner.nextLine();
 
         while (!userInput.equals("bye")) {
-            System.out.print("     ____________________________________________________________\n");
+            try {
+                printDivider();
 
-            if (userInput.equals("list")) {
-                // for each item in the arr, print it out
-                printTasksArray();
-            } else if (userInput.contains("todo")) {
-                System.out.println("     Got it. I've added this task:");
+                if (userInput.equals("list")) {
+                    // for each item in the arr, print it out
+                    printTasksArray();
+                } else if (userInput.contains("todo")) {
 
-                String td = removeFirstWord(userInput);
-                saveToDoToArray(td);
-            } else if (userInput.contains("deadline")) {
-                System.out.println("     Got it. I've added this task:");
-
-                String dl = removeFirstWord(userInput);
-                saveDeadlineToArray(dl);
-            } else if (userInput.contains("event")) {
-                System.out.println("     Got it. I've added this task:");
-                String event = removeFirstWord(userInput);
-
-                saveEventToArray(event);
-            } else if (userInput.contains("unmark")) {
-                // call markAsUndone
-                String[] str = userInput.split(" ");
-                Integer i = Integer.parseInt(str[1]);
-                setTaskUndone(i);
-            } else if (userInput.contains("mark")) {
-                // call markAsDone
-                String[] str = userInput.split(" ");
-                Integer i = Integer.parseInt(str[1]);
-                setTaskDone(i);
-            } else {
-                // implement save to arr
-                saveTasksToArray(userInput);
+                    String td = removeFirstWord(userInput);
+                    saveToDoToArray(td);
+                } else if (userInput.contains("deadline")) {
+                    String dl = removeFirstWord(userInput);
+                    saveDeadlineToArray(dl);
+                } else if (userInput.contains("event")) {
+                    String event = removeFirstWord(userInput);
+                    saveEventToArray(event);
+                } else if (userInput.contains("unmark")) {
+                    // call markAsUndone
+                    String[] str = userInput.split(" ");
+                    if (str.length < 2) {
+                        throw new InvalidTaskException("OOPSIE!! Please specify which task to unmark.");
+                    }
+                    try {
+                        Integer i = Integer.parseInt(str[1]);
+                        if (i <= 0 || i > arrCount) {
+                            throw new InvalidTaskException("OOPSIE!! Task number " + i + " does not exist.");
+                        }
+                        setTaskUndone(i);
+                    } catch (NumberFormatException e) {
+                        throw new InvalidTaskException("OOPSIE!! Please provide a valid task number.");
+                    }
+                } else if (userInput.contains("mark")) {
+                    // call markAsDone
+                    String[] str = userInput.split(" ");
+                    if (str.length < 2) {
+                        throw new InvalidTaskException("OOPSIE!! Please specify which task to mark.");
+                    }
+                    try {
+                        Integer i = Integer.parseInt(str[1]);
+                        if (i <= 0 || i > arrCount) {
+                            throw new InvalidTaskException("OOPSIE!! Task number " + i + " does not exist.");
+                        }
+                        setTaskDone(i);
+                    } catch (NumberFormatException e) {
+                        throw new InvalidTaskException("OOPSIE!! Please provide a valid task number.");
+                    }
+                } else {
+                    throw new InvalidTaskException("OOPSIE!! I can't create a task because don't understand what task you're talking about :-(");
+                }
+            } catch (InvalidTaskException e) {
+                System.out.println(e.getMessage());
+            } finally {
+                printDivider();
+                userInput = scanner.nextLine();
             }
-
-            System.out.println("     ____________________________________________________________\n");
-            userInput = scanner.nextLine();
         }
 
-        System.out.println("    ____________________________________________________________\n" +
-                "    Bye. Hope to see you again soon!\n" +
-                "    ____________________________________________________________");
+        printDivider();
+        System.out.println("Bye. Hope to see you again soon!");
+        printDivider();
         scanner.close();
     }
 
     public static void setTaskDone(Integer i) {
         tasksArray[i - 1].markAsDone();
-        System.out.println("     Nice! I've marked this task as done:\n");
-        System.out.println("     " + tasksArray[i - 1]);
+        System.out.println("Nice! I've marked this task as done:\n");
+        System.out.println(tasksArray[i - 1]);
     }
 
     public static void setTaskUndone(Integer i) {
         tasksArray[i - 1].markAsUndone();
-        System.out.println("     OK, I've marked this task as not done yet:\n");
-        System.out.println("     " + tasksArray[i - 1]);
+        System.out.println("OK, I've marked this task as not done yet:\n");
+        System.out.println(tasksArray[i - 1]);
     }
 
     public static void printTasksArray() {
         for (int i = 0; i < arrCount; i++) {
-            System.out.println("     " + (i+1) + "." + tasksArray[i]);
+            System.out.println((i + 1) + "." + tasksArray[i]);
         }
     }
 
-    public static void saveTasksToArray(String task) {
-        Task t = new Task(task);
-        tasksArray[arrCount] = t;
-        arrCount++;
-        System.out.println("     added: " + t);
-        taskInArray();
-    }
-
-    public static void saveToDoToArray(String task) {
+    public static void saveToDoToArray(String task) throws InvalidTaskException{
+        if (task.trim().isEmpty()) {
+            throw new InvalidTaskException("OOPSIE!! The description of todo cannot be empty.");
+        }
+        System.out.println("Got it. I've added this task:");
         ToDo td = new ToDo(task);
         tasksArray[arrCount] = td;
         arrCount++;
-        System.out.println("      " + td);
+        System.out.println(td);
         taskInArray();
     }
 
-    public static void saveDeadlineToArray(String task) {
+    public static void saveDeadlineToArray(String task) throws InvalidTaskException{
+        if (task.trim().isEmpty()) {
+            throw new InvalidTaskException("OOPSIE!! The description of a deadline cannot be empty.");
+        }
+
         String[] parts = task.split(" /(?:by) ");
+
+        if (parts.length != 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
+            throw new InvalidTaskException("OOPSIE!! Please use format: deadline <task> /by <date>");
+        }
+        System.out.println("Got it. I've added this task:");
         Deadline ddl = new Deadline(parts[0], parts[1]);
         tasksArray[arrCount] = ddl;
         arrCount++;
-        System.out.println("      " + ddl);
+        System.out.println(ddl);
         taskInArray();
     }
 
-    public static void saveEventToArray(String task) {
+    public static void saveEventToArray(String task) throws InvalidTaskException{
+        if (task.trim().isEmpty()) {
+            throw new InvalidTaskException("OOPSIE!! The description of an event cannot be empty.");
+        }
+
         String[] parts = task.split(" /(?:from|to) ");
+        if (parts.length != 3 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
+            throw new InvalidTaskException("OOPSIE!! Please use format: event <task> /from <start> /to <end>");
+        }
+
+        System.out.println("Got it. I've added this task:");
         Event event = new Event(parts[0], parts[1], parts[2]);
         tasksArray[arrCount] = event;
         arrCount++;
-        System.out.println("      " + event);
+        System.out.println(event);
         taskInArray();
     }
 
     public static void taskInArray() {
-        System.out.printf("     Now you have %d tasks in the list%n", arrCount);
+        System.out.printf("Now you have %d tasks in the list%n", arrCount);
     }
 
     public static String removeFirstWord(String str) {
@@ -123,5 +157,9 @@ public class MegaBot {
             return "";
         }
         return str.substring(index + 1);
+    }
+
+    public static void printDivider() {
+        System.out.println("____________________________________________________________");
     }
 }
