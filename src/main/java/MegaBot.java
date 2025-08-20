@@ -13,7 +13,7 @@ public class MegaBot {
                 "____________________________________________________________\n\n";
         System.out.println(intro);
         Scanner scanner = new Scanner(System.in);
-        String userInput = scanner.nextLine(); // Reads a String;
+        String userInput = scanner.nextLine();
 
         while (!userInput.equals("bye")) {
             System.out.print("     ____________________________________________________________\n");
@@ -21,6 +21,21 @@ public class MegaBot {
             if (userInput.equals("list")) {
                 // for each item in the arr, print it out
                 printTasksArray();
+            } else if (userInput.contains("todo")) {
+                System.out.println("     Got it. I've added this task:");
+
+                String td = removeFirstWord(userInput);
+                saveToDoToArray(td);
+            } else if (userInput.contains("deadline")) {
+                System.out.println("     Got it. I've added this task:");
+
+                String dl = removeFirstWord(userInput);
+                saveDeadlineToArray(dl);
+            } else if (userInput.contains("event")) {
+                System.out.println("     Got it. I've added this task:");
+                String event = removeFirstWord(userInput);
+
+                saveEventToArray(event);
             } else if (userInput.contains("unmark")) {
                 // call markAsUndone
                 String[] str = userInput.split(" ");
@@ -69,5 +84,44 @@ public class MegaBot {
         tasksArray[arrCount] = t;
         arrCount++;
         System.out.println("     added: " + t);
+        taskInArray();
+    }
+
+    public static void saveToDoToArray(String task) {
+        ToDo td = new ToDo(task);
+        tasksArray[arrCount] = td;
+        arrCount++;
+        System.out.println("      " + td);
+        taskInArray();
+    }
+
+    public static void saveDeadlineToArray(String task) {
+        String[] parts = task.split(" /(?:by) ");
+        Deadline ddl = new Deadline(parts[0], parts[1]);
+        tasksArray[arrCount] = ddl;
+        arrCount++;
+        System.out.println("      " + ddl);
+        taskInArray();
+    }
+
+    public static void saveEventToArray(String task) {
+        String[] parts = task.split(" /(?:from|to) ");
+        Event event = new Event(parts[0], parts[1], parts[2]);
+        tasksArray[arrCount] = event;
+        arrCount++;
+        System.out.println("      " + event);
+        taskInArray();
+    }
+
+    public static void taskInArray() {
+        System.out.printf("     Now you have %d tasks in the list%n", arrCount);
+    }
+
+    public static String removeFirstWord(String str) {
+        int index = str.indexOf(' ');
+        if (index == -1) {
+            return "";
+        }
+        return str.substring(index + 1);
     }
 }
