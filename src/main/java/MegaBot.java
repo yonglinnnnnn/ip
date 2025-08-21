@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class MegaBot {
     public static ArrayList<Task> taskList = new ArrayList<Task>();
-    public static Task[] tasksArray = new Task[100];
     public static int arrCount = 0;
 
 
@@ -23,77 +22,75 @@ public class MegaBot {
             try {
                 printDivider();
 
-                if (userInput.equals("list")) {
-                    // for each item in the arr, print it out
-                    printTasksArray();
-                } else if (userInput.contains("todo")) {
-                    String td = removeFirstWord(userInput);
-                    saveToDoToArray(td);
-                } else if (userInput.contains("deadline")) {
-                    String dl = removeFirstWord(userInput);
-                    saveDeadlineToArray(dl);
-                } else if (userInput.contains("event")) {
-                    String event = removeFirstWord(userInput);
-                    saveEventToArray(event);
-                } else if (userInput.contains("unmark")) {
-                    // call markAsUndone
-                    String[] str = userInput.split(" ");
-                    if (str.length < 2) {
-                        throw new InvalidTaskException("OOPSIE!! Please specify which task to unmark.");
-                    }
-                    try {
-                        int i = Integer.parseInt(str[1]);
-                        if (i <= 0 || i > arrCount) {
-                            throw new InvalidTaskException("OOPSIE!! Task number " + i + " does not exist.");
-                        }
-                        setTaskUndone(i);
-                    } catch (NumberFormatException e) {
-                        throw new InvalidTaskException("OOPSIE!! Please provide a valid task number.");
-                    }
-                } else if (userInput.contains("mark")) {
-                    // call markAsDone
-                    String[] str = userInput.split(" ");
-                    if (str.length < 2) {
-                        throw new InvalidTaskException("OOPSIE!! Please specify which task to mark.");
-                    }
-                    try {
-                        int i = Integer.parseInt(str[1]);
-                        if (i <= 0 || i > arrCount) {
-                            throw new InvalidTaskException("OOPSIE!! Task number " + i + " does not exist.");
-                        }
-                        setTaskDone(i);
-                    } catch (NumberFormatException e) {
-                        throw new InvalidTaskException("OOPSIE!! Please provide a valid task number.");
-                    }
-                } else if (userInput.contains("delete")) {
-                    String[] str = userInput.split(" ");
-                    if (str.length < 2) {
-                        throw new InvalidTaskException("OOPSIE!! Please specify which task to delete.");
-                    }
-                    try {
-                        int i = Integer.parseInt(str[1]);
-                        if (i <= 0 || i > arrCount) {
-                            throw new InvalidTaskException("OOPSIE!! Task number " + i + " does not exist.");
-                        }
-                        deleteTask(i);
-                    } catch (NumberFormatException e) {
-                        throw new InvalidTaskException("OOPSIE!! Please provide a valid task number.");
-                    }
-                } else {
-                    throw new InvalidTaskException("OOPSIE!! I can't create a task because don't understand what task you're talking about :-(");
+                Command cmd = Command.fromString(userInput);
+
+                switch (cmd) {
+                    case LIST:
+                        printTasksArray();
+                        break;
+                    case TODO:
+                        String todo = removeFirstWord(userInput);
+                        saveToDoToArray(todo);
+                        break;
+                    case DEADLINE:
+                        String deadline = removeFirstWord(userInput);
+                        saveDeadlineToArray(deadline);
+                        break;
+                    case EVENT:
+                        String event = removeFirstWord(userInput);
+                        saveEventToArray(event);
+                        break;
+                    case UNMARK:
+                        handleMarkCommand(userInput, false);
+                        break;
+                    case MARK:
+                        handleMarkCommand(userInput, true);
+                        break;
+                    case DELETE:
+                        handleDeleteCommand(userInput);
+                        break;
+                    case UNKNOWN:
+                    default:
+                        throw new InvalidTaskException("OOPSIE!! I can't create a task because I don't understand what task you're talking about :-(");
                 }
-            } catch (InvalidTaskException e) {
+            } catch (InvalidTaskException e){
                 System.out.println(e.getMessage());
             } finally {
                 printDivider();
                 userInput = scanner.nextLine();
             }
+
         }
 
         printDivider();
         System.out.println("Bye. Hope to see you again soon!");
         printDivider();
         scanner.close();
+
+    }
+
+    // calls setTaskDone and setTaskUndone
+    private static void handleMarkCommand(String userInput, boolean markAsDone) throws InvalidTaskException {
+        String[] str = userInput.split(" ");
+        if (str.length < 2) {
+            String action = markAsDone ? "mark" : "unmark";
+            throw new InvalidTaskException("OOPSIE!! Please specify which task to " + action + ".");
+        }
+
+        try {
+            int taskNumber = Integer.parseInt(str[1]);
+            if (taskNumber <= 0 || taskNumber > arrCount) {
+                throw new InvalidTaskException("OOPSIE!! Task number " + taskNumber + " does not exist.");
+            }
+
+            if (markAsDone) {
+                setTaskDone(taskNumber);
+            } else {
+                setTaskUndone(taskNumber);
+            }
+        } catch (NumberFormatException e) {
+            throw new InvalidTaskException("OOPSIE!! Please provide a valid task number.");
+        }
     }
 
     public static void setTaskDone(Integer i) {
@@ -106,6 +103,23 @@ public class MegaBot {
         taskList.get(i - 1).markAsUndone();
         System.out.println("OK, I've marked this task as not done yet:\n");
         System.out.println(taskList.get(i - 1));
+    }
+
+    private static void handleDeleteCommand(String userInput) throws InvalidTaskException {
+        String[] str = userInput.split(" ");
+        if (str.length < 2) {
+            throw new InvalidTaskException("OOPSIE!! Please specify which task to delete.");
+        }
+
+        try {
+            int taskNumber = Integer.parseInt(str[1]);
+            if (taskNumber <= 0 || taskNumber > arrCount) {
+                throw new InvalidTaskException("OOPSIE!! Task number " + taskNumber + " does not exist.");
+            }
+            deleteTask(taskNumber);
+        } catch (NumberFormatException e) {
+            throw new InvalidTaskException("OOPSIE!! Please provide a valid task number.");
+        }
     }
 
     public static void deleteTask(Integer i) {
