@@ -1,7 +1,9 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MegaBot {
+    public static ArrayList<Task> taskList = new ArrayList<Task>();
     public static Task[] tasksArray = new Task[100];
     public static int arrCount = 0;
 
@@ -25,7 +27,6 @@ public class MegaBot {
                     // for each item in the arr, print it out
                     printTasksArray();
                 } else if (userInput.contains("todo")) {
-
                     String td = removeFirstWord(userInput);
                     saveToDoToArray(td);
                 } else if (userInput.contains("deadline")) {
@@ -41,7 +42,7 @@ public class MegaBot {
                         throw new InvalidTaskException("OOPSIE!! Please specify which task to unmark.");
                     }
                     try {
-                        Integer i = Integer.parseInt(str[1]);
+                        int i = Integer.parseInt(str[1]);
                         if (i <= 0 || i > arrCount) {
                             throw new InvalidTaskException("OOPSIE!! Task number " + i + " does not exist.");
                         }
@@ -56,11 +57,25 @@ public class MegaBot {
                         throw new InvalidTaskException("OOPSIE!! Please specify which task to mark.");
                     }
                     try {
-                        Integer i = Integer.parseInt(str[1]);
+                        int i = Integer.parseInt(str[1]);
                         if (i <= 0 || i > arrCount) {
                             throw new InvalidTaskException("OOPSIE!! Task number " + i + " does not exist.");
                         }
                         setTaskDone(i);
+                    } catch (NumberFormatException e) {
+                        throw new InvalidTaskException("OOPSIE!! Please provide a valid task number.");
+                    }
+                } else if (userInput.contains("delete")) {
+                    String[] str = userInput.split(" ");
+                    if (str.length < 2) {
+                        throw new InvalidTaskException("OOPSIE!! Please specify which task to delete.");
+                    }
+                    try {
+                        int i = Integer.parseInt(str[1]);
+                        if (i <= 0 || i > arrCount) {
+                            throw new InvalidTaskException("OOPSIE!! Task number " + i + " does not exist.");
+                        }
+                        deleteTask(i);
                     } catch (NumberFormatException e) {
                         throw new InvalidTaskException("OOPSIE!! Please provide a valid task number.");
                     }
@@ -82,20 +97,28 @@ public class MegaBot {
     }
 
     public static void setTaskDone(Integer i) {
-        tasksArray[i - 1].markAsDone();
+        taskList.get(i - 1).markAsDone();
         System.out.println("Nice! I've marked this task as done:\n");
-        System.out.println(tasksArray[i - 1]);
+        System.out.println(taskList.get(i - 1));
     }
 
     public static void setTaskUndone(Integer i) {
-        tasksArray[i - 1].markAsUndone();
+        taskList.get(i - 1).markAsUndone();
         System.out.println("OK, I've marked this task as not done yet:\n");
-        System.out.println(tasksArray[i - 1]);
+        System.out.println(taskList.get(i - 1));
+    }
+
+    public static void deleteTask(Integer i) {
+        System.out.println("Noted. I've removed this task:");
+        System.out.println(taskList.get(i - 1));
+        taskList.remove(i - 1);
+        arrCount--;
+        taskInArray();
     }
 
     public static void printTasksArray() {
         for (int i = 0; i < arrCount; i++) {
-            System.out.println((i + 1) + "." + tasksArray[i]);
+            System.out.println((i + 1) + "." + taskList.get(i));
         }
     }
 
@@ -105,7 +128,8 @@ public class MegaBot {
         }
         System.out.println("Got it. I've added this task:");
         ToDo td = new ToDo(task);
-        tasksArray[arrCount] = td;
+        taskList.add(td);
+        // tasksArray[arrCount] = td;
         arrCount++;
         System.out.println(td);
         taskInArray();
@@ -123,7 +147,8 @@ public class MegaBot {
         }
         System.out.println("Got it. I've added this task:");
         Deadline ddl = new Deadline(parts[0], parts[1]);
-        tasksArray[arrCount] = ddl;
+        taskList.add(ddl);
+        // tasksArray[arrCount] = ddl;
         arrCount++;
         System.out.println(ddl);
         taskInArray();
@@ -141,7 +166,8 @@ public class MegaBot {
 
         System.out.println("Got it. I've added this task:");
         Event event = new Event(parts[0], parts[1], parts[2]);
-        tasksArray[arrCount] = event;
+        taskList.add(event);
+        // tasksArray[arrCount] = event;
         arrCount++;
         System.out.println(event);
         taskInArray();
