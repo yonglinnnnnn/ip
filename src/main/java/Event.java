@@ -1,9 +1,28 @@
-public class Event extends Deadline{
-    String startDateTime;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
-    public Event(String task, String startDT, String ddl) {
+public class Event extends Deadline{
+    private final String stringStartDateTime;
+    private final LocalDate startDateTime;
+
+    public Event(String task, String startDT, String ddl) throws InvalidTaskException {
         super(task, ddl);
-        this.startDateTime = startDT;
+        this.stringStartDateTime = startDT;
+
+        try {
+            this.startDateTime = LocalDate.parse(startDT, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        } catch (DateTimeException e) {
+            throw new InvalidTaskException("OOPSIE!! The start date format is invalid. Please use YYYY-MM-DD format.");
+        }
+    }
+
+    public String getStringStartDateTime() {
+        return this.stringStartDateTime;
+    }
+
+    public LocalDate getStartDateTime() {
+        return this.startDateTime;
     }
 
     public String getTaskDuration() {
@@ -12,7 +31,11 @@ public class Event extends Deadline{
 
     @Override
     public String toString() {
-        return "[E]" + this.getStatusIcon() + " " + this.task + " (from: " + this.startDateTime + " to: " + this.deadline + ")";
+        String startDTFormat = this.getStartDateTime().format(DateTimeFormatter.ofPattern("MMM d yyyy"));
+        String endDTFormat = super.getDeadline().format(DateTimeFormatter.ofPattern("MMM d yyyy"));
+
+        return "[E]" + this.getStatusIcon() + " " + this.task + " (from: "
+                + startDTFormat + " to: " + endDTFormat + ")";
     }
 
     @Override
