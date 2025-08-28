@@ -1,3 +1,5 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -66,7 +68,7 @@ public class MegaBot {
         System.out.println("Bye. Hope to see you again soon!");
         printDivider();
         scanner.close();
-
+        saveToFile();
     }
 
     // calls setTaskDone and setTaskUndone
@@ -201,5 +203,26 @@ public class MegaBot {
 
     public static void printDivider() {
         System.out.println("____________________________________________________________");
+    }
+
+    public static void saveToFile() {
+        /**
+         * at the end of the program, pass to this function
+         *
+         * open file
+         *      for each line in the array, print it out in the file
+         */
+        try {
+            FileWriter writer = new FileWriter("data/duke.txt");
+            for (int i = 0; i < arrCount; i++) {
+                writer.write(taskList.get(i).formatData());
+                writer.write("\n");
+            }
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("An error occurred when writing into a file.");
+            throw new RuntimeException(e);
+        }
+
     }
 }

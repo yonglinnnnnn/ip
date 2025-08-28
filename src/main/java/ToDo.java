@@ -7,4 +7,9 @@ public class ToDo extends Task {
     public String toString() {
         return "[T]" + this.getStatusIcon() + " " + this.task;
     }
+
+    @Override
+    public String formatData() {
+        return "T | " + super.formatData();
+    }
 }
