@@ -1,3 +1,5 @@
+package megabot;
+
 public enum Command {
     LIST("list"),
     TODO("todo"),

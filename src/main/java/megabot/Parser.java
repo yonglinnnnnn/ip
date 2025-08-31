@@ -1,3 +1,7 @@
+package megabot;
+
+import megabot.exception.InvalidTaskException;
+
 public class Parser {
 
     public static Command parseCommand(String userInput) {
@@ -26,10 +30,6 @@ public class Parser {
     }
 
     public static String[] parseDeadline(String task) throws InvalidTaskException {
-        if (task.trim().isEmpty()) {
-            throw new InvalidTaskException("OOPSIE!! The description of a deadline cannot be empty.");
-        }
-
         String[] parts = task.split(" /(?:by) ");
         if (parts.length != 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
             throw new InvalidTaskException("OOPSIE!! Please use format: deadline <task> /by <date>");

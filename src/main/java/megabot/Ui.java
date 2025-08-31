@@ -1,3 +1,7 @@
+package megabot;
+
+import megabot.task.Task;
+
 import java.util.Scanner;
 
 public class Ui {

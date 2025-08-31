@@ -1,3 +1,11 @@
+package megabot;
+
+import megabot.exception.InvalidTaskException;
+import megabot.task.Deadline;
+import megabot.task.Event;
+import megabot.task.Task;
+import megabot.task.ToDo;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

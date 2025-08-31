@@ -1,3 +1,5 @@
+package megabot.exception;
+
 public class InvalidTaskException extends Exception{
 
     public InvalidTaskException(String msg) {
