@@ -4,11 +4,23 @@ import megabot.exception.InvalidTaskException;
 import megabot.task.*;
 import java.io.IOException;
 
+/**
+ * Main class for the MegaBot task management application.
+ * Manages the interaction between the user interface, task storage, and task operations.
+ *
+ * @author Xu Yong Lin
+ * @version 1.0
+ */
 public class MegaBot {
     private Storage storage;
     private TaskList tasks;
     private Ui ui;
 
+    /**
+     * Constructs a MegaBot instance with the specified file path for task storage.
+     *
+     * @param filePath the path to the file where tasks are stored
+     */
     public MegaBot(String filePath) {
         ui = new Ui();
         storage = new Storage(filePath);
@@ -20,6 +32,10 @@ public class MegaBot {
         }
     }
 
+    /**
+     * Runs the main application loop.
+     * Displays welcome message, processes user commands, and handles cleanup.
+     */
     public void run() {
         ui.showWelcome();
 
@@ -42,6 +58,12 @@ public class MegaBot {
         saveTasksToFile();
     }
 
+    /**
+     * Handles a user command by parsing it and executing the appropriate action.
+     *
+     * @param userInput the raw user input string
+     * @throws InvalidTaskException if the command is invalid or cannot be executed
+     */
     private void handleCommand(String userInput) throws InvalidTaskException {
         Command cmd = Parser.parseCommand(userInput);
 
@@ -73,6 +95,12 @@ public class MegaBot {
         }
     }
 
+    /**
+     * Handles the creation of a new todo task.
+     *
+     * @param userInput the user input containing the todo command and description
+     * @throws InvalidTaskException if the todo description is empty
+     */
     private void handleTodoCommand(String userInput) throws InvalidTaskException {
         String taskDescription = Parser.removeFirstWord(userInput);
         if (taskDescription.trim().isEmpty()) {
@@ -84,6 +112,12 @@ public class MegaBot {
         ui.showTaskAdded(todo, tasks.size());
     }
 
+    /**
+     * Handles the creation of a new deadline task.
+     *
+     * @param userInput the user input containing the deadline command and parameters
+     * @throws InvalidTaskException if the deadline format is invalid
+     */
     private void handleDeadlineCommand(String userInput) throws InvalidTaskException {
         String taskContent = Parser.removeFirstWord(userInput);
         String[] parts = Parser.parseDeadline(taskContent);
@@ -93,6 +127,12 @@ public class MegaBot {
         ui.showTaskAdded(deadline, tasks.size());
     }
 
+    /**
+     * Handles the creation of a new event task.
+     *
+     * @param userInput the user input containing the event command and parameters
+     * @throws InvalidTaskException if the event format is invalid
+     */
     private void handleEventCommand(String userInput) throws InvalidTaskException {
         String taskContent = Parser.removeFirstWord(userInput);
         String[] parts = Parser.parseEvent(taskContent);
@@ -101,6 +141,14 @@ public class MegaBot {
         tasks.addTask(event);
         ui.showTaskAdded(event, tasks.size());
     }
+
+    /**
+     * Handles marking or unmarking a task as done.
+     *
+     * @param userInput the user input containing the mark/unmark command and task number
+     * @param markAsDone true to mark as done, false to mark as undone
+     * @throws InvalidTaskException if the task number is invalid
+     */
 
     private void handleMarkCommand(String userInput, boolean markAsDone) throws InvalidTaskException {
         int taskNumber = Parser.parseTaskNumber(userInput);
@@ -119,6 +167,12 @@ public class MegaBot {
         }
     }
 
+    /**
+     * Handles the deletion of a task.
+     *
+     * @param userInput the user input containing the delete command and task number
+     * @throws InvalidTaskException if the task number is invalid
+     */
     private void handleDeleteCommand(String userInput) throws InvalidTaskException {
         int taskNumber = Parser.parseTaskNumber(userInput);
         int taskIndex = taskNumber - 1; // Convert to 0-based index
@@ -132,6 +186,9 @@ public class MegaBot {
         ui.showTaskDeleted(deletedTask, tasks.size());
     }
 
+    /**
+     * Saves all tasks to the storage file.
+     */
     private void saveTasksToFile() {
         try {
             storage.save(tasks.getTasks());
@@ -140,6 +197,11 @@ public class MegaBot {
         }
     }
 
+    /**
+     * Main entry point of the application.
+     *
+     * @param args command line arguments (not used)
+     */
     public static void main(String[] args) {
         new MegaBot("data/duke.txt").run();
     }

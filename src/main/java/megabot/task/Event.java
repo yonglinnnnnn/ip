@@ -6,10 +6,26 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents a task that occurs during a specific time period.
+ * An event task extends Deadline and has both a start date and an end date.
+ * The start date format should be "yyyy-MM-dd" and end date follows the Deadline format.
+ *
+ * @author Xu Yong Lin
+ * @version 1.0
+ */
 public class Event extends Deadline{
     private final String stringStartDateTime;
     private final LocalDate startDateTime;
 
+    /**
+     * Constructs an Event task with the specified description, start date, and end date.
+     *
+     * @param task the description of the event task
+     * @param startDT the start date in format "yyyy-MM-dd"
+     * @param ddl the end date in format "yyyy-MM-dd" or "yyyy-MM-dd HHmm"
+     * @throws InvalidTaskException if either date format is invalid
+     */
     public Event(String task, String startDT, String ddl) throws InvalidTaskException {
         super(task, ddl);
         this.stringStartDateTime = startDT;
@@ -21,14 +37,30 @@ public class Event extends Deadline{
         }
     }
 
+    /**
+     * Returns the original start date string as provided by the user.
+     *
+     * @return the original start date string
+     */
     public String getStringStartDateTime() {
         return this.stringStartDateTime;
     }
 
+    /**
+     * Returns the parsed start date as a LocalDate object.
+     *
+     * @return the start date as LocalDate
+     */
     public LocalDate getStartDateTime() {
         return this.startDateTime;
     }
 
+    /**
+     * Returns the task duration string combining start and end dates.
+     * Format: "startDate-endDateTime"
+     *
+     * @return the duration string for file storage
+     */
     public String getTaskDuration() {
         return this.startDateTime + "-" + super.getDeadline();
     }
@@ -42,6 +74,12 @@ public class Event extends Deadline{
                 + startDTFormat + " to: " + endDTFormat + ")";
     }
 
+    /**
+     * Returns the event task data in a format suitable for file storage.
+     * Format: "E | STATUS | DESCRIPTION | DURATION"
+     *
+     * @return formatted string for file storage
+     */
     @Override
     public String formatData() {
         String str = (super.getIsDone()) ? "1" : "0" + " | " + getTask();
