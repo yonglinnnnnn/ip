@@ -73,23 +73,23 @@ public class Storage {
         Task task = null;
 
         switch (taskType) {
-            case "T":
-                task = new ToDo(taskDescription);
-                break;
-            case "D":
-                if (parts.length >= 4) {
-                    task = new Deadline(taskDescription, parts[3]);
+        case "T":
+            task = new ToDo(taskDescription);
+            break;
+        case "D":
+            if (parts.length >= 4) {
+                task = new Deadline(taskDescription, parts[3]);
+            }
+            break;
+        case "E":
+            if (parts.length >= 4) {
+                // Parse the duration string (start-end format)
+                String[] dateParts = parts[3].split("-");
+                if (dateParts.length >= 2) {
+                    task = new Event(taskDescription, dateParts[0], dateParts[1]);
                 }
-                break;
-            case "E":
-                if (parts.length >= 4) {
-                    // Parse the duration string (start-end format)
-                    String[] dateParts = parts[3].split("-");
-                    if (dateParts.length >= 2) {
-                        task = new Event(taskDescription, dateParts[0], dateParts[1]);
-                    }
-                }
-                break;
+            }
+            break;
         }
 
         if (task != null && isDone) {

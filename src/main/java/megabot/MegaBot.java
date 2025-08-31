@@ -5,9 +5,9 @@ import megabot.task.*;
 import java.io.IOException;
 
 public class MegaBot {
-    private Storage storage;
+    private final Storage storage;
     private TaskList tasks;
-    private Ui ui;
+    private final Ui ui;
 
     public MegaBot(String filePath) {
         ui = new Ui();
@@ -46,30 +46,30 @@ public class MegaBot {
         Command cmd = Parser.parseCommand(userInput);
 
         switch (cmd) {
-            case LIST:
-                ui.showTaskList(tasks.getTasks());
-                break;
-            case TODO:
-                handleTodoCommand(userInput);
-                break;
-            case DEADLINE:
-                handleDeadlineCommand(userInput);
-                break;
-            case EVENT:
-                handleEventCommand(userInput);
-                break;
-            case MARK:
-                handleMarkCommand(userInput, true);
-                break;
-            case UNMARK:
-                handleMarkCommand(userInput, false);
-                break;
-            case DELETE:
-                handleDeleteCommand(userInput);
-                break;
-            case UNKNOWN:
-            default:
-                throw new InvalidTaskException("OOPSIE!! I can't create a task because I don't understand what task you're talking about :-(");
+        case LIST:
+            ui.showTaskList(tasks.getTasks());
+            break;
+        case TODO:
+            handleTodoCommand(userInput);
+            break;
+        case DEADLINE:
+            handleDeadlineCommand(userInput);
+            break;
+        case EVENT:
+            handleEventCommand(userInput);
+            break;
+        case MARK:
+            handleMarkCommand(userInput, true);
+            break;
+        case UNMARK:
+            handleMarkCommand(userInput, false);
+            break;
+        case DELETE:
+            handleDeleteCommand(userInput);
+            break;
+        case UNKNOWN:
+        default:
+            throw new InvalidTaskException("OOPSIE!! I can't create a task because I don't understand what task you're talking about :-(");
         }
     }
 
