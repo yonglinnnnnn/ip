@@ -1,0 +1,99 @@
+package megabot;
+
+import megabot.exception.InvalidTaskException;
+import megabot.task.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import static org.junit.jupiter.api.Assertions.*;
+
+class StorageTest {
+    private Storage storage;
+
+    @TempDir
+    Path tempDir;
+
+    @BeforeEach
+    void setUp() {
+        File testFile = tempDir.resolve("test_tasks.txt").toFile();
+        storage = new Storage(testFile.getAbsolutePath());
+    }
+
+    @Test
+    void load_nonExistentFile_returnsEmptyList() throws InvalidTaskException {
+        ArrayList<Task> tasks = storage.load();
+        assertTrue(tasks.isEmpty());
+    }
+
+    @Test
+    void load_invalidLines_skipsInvalidLines() throws IOException, InvalidTaskException {
+        File testFile = tempDir.resolve("test_invalid.txt").toFile();
+        FileWriter writer = new FileWriter(testFile);
+        writer.write("T | 0 | valid task\n");
+        writer.write("invalid line\n");
+        writer.write("D | 1 | another valid task | 2023-12-01\n");
+        writer.close();
+
+        Storage testStorage = new Storage(testFile.getAbsolutePath());
+        ArrayList<Task> tasks = testStorage.load();
+
+        assertEquals(2, tasks.size());
+    }
+
+    @Test
+    void save_emptyList_createsEmptyFile() throws IOException {
+        ArrayList<Task> tasks = new ArrayList<>();
+        storage.save(tasks);
+
+        // Verify file exists and is empty
+        File testFile = tempDir.resolve("test_tasks.txt").toFile();
+        assertTrue(testFile.exists());
+        assertEquals(0, testFile.length());
+    }
+
+    @Test
+    void save_taskList_writesCorrectFormat() throws IOException, InvalidTaskException {
+        ArrayList<Task> tasks = new ArrayList<>();
+        ToDo todo = new ToDo("read book");
+        Deadline deadline = new Deadline("submit assignment", "2023-12-01");
+
+        tasks.add(todo);
+        tasks.add(deadline);
+
+        storage.save(tasks);
+
+        // Verify by loading back
+        ArrayList<Task> loadedTasks = storage.load();
+        assertEquals(2, loadedTasks.size());
+
+        assertEquals("read book", loadedTasks.get(0).getTask());
+        assertFalse(loadedTasks.get(0).getIsDone());
+
+        assertEquals("submit assignment", loadedTasks.get(1).getTask());
+        assertFalse(loadedTasks.get(1).getIsDone());
+    }
+
+    @Test
+    void save_createsDirectoryIfNotExists() throws IOException {
+        File nonExistentDir = tempDir.resolve("new_dir").resolve("test.txt").toFile();
+        Storage newStorage = new Storage(nonExistentDir.getAbsolutePath());
+
+        ArrayList<Task> tasks = new ArrayList<>();
+        tasks.add(new ToDo("test task"));
+
+        // Should not throw exception
+        assertDoesNotThrow(() -> newStorage.save(tasks));
+        assertTrue(nonExistentDir.exists());
+    }
+
+    @Test
+    void constructor_validFilePath_createsStorage() {
+        Storage newStorage = new Storage("test/path/file.txt");
+        assertNotNull(newStorage);
+    }
+}

@@ -5,6 +5,7 @@ import megabot.exception.InvalidTaskException;
 public class Parser {
 
     public static Command parseCommand(String userInput) {
+
         return Command.fromString(userInput);
     }
 

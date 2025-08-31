@@ -1,5 +1,6 @@
 package megabot;
 
+import megabot.exception.InvalidTaskException;
 import megabot.task.Task;
 
 import java.util.ArrayList;
@@ -8,18 +9,24 @@ public class TaskList {
     private ArrayList<Task> tasks;
 
     public TaskList() {
+
         this.tasks = new ArrayList<>();
     }
 
     public TaskList(ArrayList<Task> tasks) {
+
         this.tasks = tasks;
     }
 
     public void addTask(Task task) {
+
         tasks.add(task);
     }
 
-    public void deleteTask(int index) {
+    public void deleteTask(int index) throws InvalidTaskException {
+        if (index < 0 || index > tasks.size()) {
+            throw new InvalidTaskException("Please give a valid number to delete the task from!!");
+        }
         if (index >= 0 && index < tasks.size()) {
             tasks.remove(index);
         }
@@ -47,10 +54,12 @@ public class TaskList {
     }
 
     public int size() {
+
         return tasks.size();
     }
 
     public boolean isEmpty() {
+
         return tasks.isEmpty();
     }
 

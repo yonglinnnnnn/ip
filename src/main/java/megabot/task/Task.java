@@ -1,8 +1,8 @@
 package megabot.task;
 
 public class Task {
-    String task;
-    Boolean isDone;
+    private final String task;
+    private Boolean isDone;
 
     public Task(String task) {
         this.task = task;
@@ -31,13 +31,14 @@ public class Task {
 
     @Override
     public String toString() {
-        return getStatusIcon() + " " + getTask();
+        return getStatusIcon() + " " + this.getTask();
     }
 
     /**
      * @return String that contains the task megabot.data for file writing
      */
     public String formatData() {
-        return (this.isDone) ? "1" : "0" + " | " + getTask();
+        String status = this.getIsDone() ? "1" : "0";
+        return status + " | " + this.getTask();
     }
 }
