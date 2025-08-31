@@ -1,3 +1,7 @@
+package megabot.task;
+
+import megabot.exception.InvalidTaskException;
+
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

@@ -1,3 +1,5 @@
+package megabot.task;
+
 public class Task {
     String task;
     Boolean isDone;
@@ -33,7 +35,7 @@ public class Task {
     }
 
     /**
-     * @return String that contains the task data for file writing
+     * @return String that contains the task megabot.data for file writing
      */
     public String formatData() {
         return (this.isDone) ? "1" : "0" + " | " + getTask();
