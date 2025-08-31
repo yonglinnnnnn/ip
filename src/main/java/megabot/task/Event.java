@@ -38,7 +38,7 @@ public class Event extends Deadline{
         String startDTFormat = this.getStartDateTime().format(DateTimeFormatter.ofPattern("MMM d yyyy"));
         String endDTFormat = super.getDeadline().format(DateTimeFormatter.ofPattern("MMM d yyyy"));
 
-        return "[E]" + this.getStatusIcon() + " " + this.task + " (from: "
+        return "[E]" + this.getStatusIcon() + " " + super.getTask() + " (from: "
                 + startDTFormat + " to: " + endDTFormat + ")";
     }
 

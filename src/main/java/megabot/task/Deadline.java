@@ -45,7 +45,7 @@ public class Deadline extends Task {
 
     @Override
     public String toString() {
-        return "[D]" + this.getStatusIcon() + " " + this.task + " (by: "
+        return "[D]" + this.getStatusIcon() + " " + super.getTask() + " (by: "
                 + this.getDeadline().format(DateTimeFormatter.ofPattern("MMM d yyyy HH:mm")) + ")";
     }
 

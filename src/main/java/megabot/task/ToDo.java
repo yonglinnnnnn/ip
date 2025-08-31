@@ -7,7 +7,7 @@ public class ToDo extends Task {
 
     @Override
     public String toString() {
-        return "[T]" + this.getStatusIcon() + " " + this.task;
+        return "[T]" + this.getStatusIcon() + " " + super.getTask();
     }
 
     @Override
