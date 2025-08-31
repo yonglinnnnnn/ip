@@ -3,6 +3,7 @@ package megabot;
 import megabot.exception.InvalidTaskException;
 import megabot.task.*;
 import java.io.IOException;
+import java.util.*;
 
 /**
  * Main class for the MegaBot task management application.
@@ -58,12 +59,6 @@ public class MegaBot {
         saveTasksToFile();
     }
 
-    /**
-     * Handles a user command by parsing it and executing the appropriate action.
-     *
-     * @param userInput the raw user input string
-     * @throws InvalidTaskException if the command is invalid or cannot be executed
-     */
     private void handleCommand(String userInput) throws InvalidTaskException {
         Command cmd = Parser.parseCommand(userInput);
 
@@ -88,6 +83,9 @@ public class MegaBot {
             break;
         case DELETE:
             handleDeleteCommand(userInput);
+            break;
+        case FIND:
+            handleFindCommand(userInput);
             break;
         case UNKNOWN:
         default:
@@ -185,6 +183,19 @@ public class MegaBot {
         tasks.deleteTask(taskIndex);
         ui.showTaskDeleted(deletedTask, tasks.size());
     }
+
+    /**
+     * Handles the search for tasks containing a keyword.
+     *
+     * @param userInput the user input containing the find command and keyword
+     * @throws InvalidTaskException if no keyword is provided
+     */
+    private void handleFindCommand(String userInput) throws InvalidTaskException {
+        String keyword = Parser.parseFindKeyword(userInput);
+        ArrayList<Task> foundTasks = tasks.findTasks(keyword);
+        ui.showFoundTasks(foundTasks, keyword);
+    }
+
 
     /**
      * Saves all tasks to the storage file.

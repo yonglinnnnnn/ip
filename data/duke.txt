@@ -1,2 +1,2 @@
 T | 0 | read book
-D | 0 | submit assignment | 2023-12-01
+D | 0 | return book | 2023-12-01 0000

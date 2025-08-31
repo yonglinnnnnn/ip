@@ -125,6 +125,23 @@ public class Ui {
     }
 
     /**
+     * Displays the search results for tasks matching a keyword.
+     *
+     * @param tasks the list of matching tasks to display
+     * @param keyword the keyword that was searched for
+     */
+    public void showFoundTasks(java.util.ArrayList<Task> tasks, String keyword) {
+        if (tasks.isEmpty()) {
+            System.out.println("No matching tasks found for keyword: " + keyword);
+        } else {
+            System.out.println("Here are the matching tasks in your list:");
+            for (int i = 0; i < tasks.size(); i++) {
+                System.out.println((i + 1) + "." + tasks.get(i));
+            }
+        }
+    }
+
+    /**
      * Displays the current number of tasks in the list.
      *
      * @param count the number of tasks
