@@ -5,7 +5,7 @@ import megabot.task.Task;
 import java.util.Scanner;
 
 public class Ui {
-    private Scanner scanner;
+    private final Scanner scanner;
 
     public Ui() {
         this.scanner = new Scanner(System.in);
@@ -63,6 +63,23 @@ public class Ui {
     public void showTaskList(java.util.ArrayList<Task> tasks) {
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println((i + 1) + "." + tasks.get(i));
+        }
+    }
+
+    /**
+     * Displays the search results for tasks matching a keyword.
+     *
+     * @param tasks the list of matching tasks to display
+     * @param keyword the keyword that was searched for
+     */
+    public void showFoundTasks(java.util.ArrayList<Task> tasks, String keyword) {
+        if (tasks.isEmpty()) {
+            System.out.println("No matching tasks found for keyword: " + keyword);
+        } else {
+            System.out.println("Here are the matching tasks in your list:");
+            for (int i = 0; i < tasks.size(); i++) {
+                System.out.println((i + 1) + "." + tasks.get(i));
+            }
         }
     }
 

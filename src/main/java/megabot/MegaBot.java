@@ -3,6 +3,7 @@ package megabot;
 import megabot.exception.InvalidTaskException;
 import megabot.task.*;
 import java.io.IOException;
+import java.util.*;
 
 public class MegaBot {
     private Storage storage;
@@ -46,30 +47,33 @@ public class MegaBot {
         Command cmd = Parser.parseCommand(userInput);
 
         switch (cmd) {
-            case LIST:
-                ui.showTaskList(tasks.getTasks());
-                break;
-            case TODO:
-                handleTodoCommand(userInput);
-                break;
-            case DEADLINE:
-                handleDeadlineCommand(userInput);
-                break;
-            case EVENT:
-                handleEventCommand(userInput);
-                break;
-            case MARK:
-                handleMarkCommand(userInput, true);
-                break;
-            case UNMARK:
-                handleMarkCommand(userInput, false);
-                break;
-            case DELETE:
-                handleDeleteCommand(userInput);
-                break;
-            case UNKNOWN:
-            default:
-                throw new InvalidTaskException("OOPSIE!! I can't create a task because I don't understand what task you're talking about :-(");
+        case LIST:
+            ui.showTaskList(tasks.getTasks());
+            break;
+        case TODO:
+            handleTodoCommand(userInput);
+            break;
+        case DEADLINE:
+            handleDeadlineCommand(userInput);
+            break;
+        case EVENT:
+            handleEventCommand(userInput);
+            break;
+        case MARK:
+            handleMarkCommand(userInput, true);
+            break;
+        case UNMARK:
+            handleMarkCommand(userInput, false);
+            break;
+        case DELETE:
+            handleDeleteCommand(userInput);
+            break;
+        case FIND:
+            handleFindCommand(userInput);
+            break;
+        case UNKNOWN:
+        default:
+            throw new InvalidTaskException("OOPSIE!! I can't create a task because I don't understand what task you're talking about :-(");
         }
     }
 
@@ -131,6 +135,19 @@ public class MegaBot {
         tasks.deleteTask(taskIndex);
         ui.showTaskDeleted(deletedTask, tasks.size());
     }
+
+    /**
+     * Handles the search for tasks containing a keyword.
+     *
+     * @param userInput the user input containing the find command and keyword
+     * @throws InvalidTaskException if no keyword is provided
+     */
+    private void handleFindCommand(String userInput) throws InvalidTaskException {
+        String keyword = Parser.parseFindKeyword(userInput);
+        ArrayList<Task> foundTasks = tasks.findTasks(keyword);
+        ui.showFoundTasks(foundTasks, keyword);
+    }
+
 
     private void saveTasksToFile() {
         try {

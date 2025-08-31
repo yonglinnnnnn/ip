@@ -51,4 +51,20 @@ public class Parser {
 
         return parts;
     }
+
+    /**
+     * Parses the keyword from a find command.
+     * Expected format: "find keyword"
+     *
+     * @param userInput the user input containing the find command and keyword
+     * @return the keyword to search for
+     * @throws InvalidTaskException if no keyword is provided
+     */
+    public static String parseFindKeyword(String userInput) throws InvalidTaskException {
+        String keyword = removeFirstWord(userInput);
+        if (keyword.trim().isEmpty()) {
+            throw new InvalidTaskException("OOPSIE!! Please specify a keyword to search for.");
+        }
+        return keyword.trim();
+    }
 }
