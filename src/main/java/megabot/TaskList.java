@@ -1,6 +1,7 @@
 package megabot;
 
 import java.util.ArrayList;
+import java.util.stream.*;
 
 import megabot.exception.InvalidTaskException;
 import megabot.task.Task;
@@ -152,15 +153,24 @@ public class TaskList {
      */
     public ArrayList<Task> findTasks(String keyword) {
         assert keyword != null : "Search keyword cannot be null";
-        ArrayList<Task> matchingTasks = new ArrayList<>();
-        String lowerKeyword = keyword.toLowerCase();
 
-        for (Task task : tasks) {
-            if (task.getTask().toLowerCase().contains(lowerKeyword)) {
-                matchingTasks.add(task);
+        /*
+            ArrayList<Task> matchingTasks = new ArrayList<>();
+            String lowerKeyword = keyword.toLowerCase();
+
+            for (Task task : tasks) {
+                if (task.getTask().toLowerCase().contains(lowerKeyword)) {
+                    matchingTasks.add(task);
+                }
             }
-        }
 
-        return matchingTasks;
+            return matchingTasks;
+        */
+
+        Stream<Task> streamTasks = tasks.stream();
+
+        return (ArrayList<Task>) streamTasks
+                .filter(task -> task.getTask().toLowerCase().contains(keyword.toLowerCase()))
+                .collect(Collectors.toList());
     }
 }
