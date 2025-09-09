@@ -1,9 +1,10 @@
 package megabot;
 
+import java.util.ArrayList;
+
 import megabot.exception.InvalidTaskException;
 import megabot.task.Task;
 
-import java.util.ArrayList;
 
 /**
  * Represents a collection of tasks with operations to manage them.

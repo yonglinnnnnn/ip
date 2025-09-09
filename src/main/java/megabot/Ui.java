@@ -1,8 +1,8 @@
 package megabot;
 
-import megabot.task.Task;
-
 import java.util.Scanner;
+
+import megabot.task.Task;
 
 /**
  * Handles all user interface interactions for the MegaBot application.
@@ -27,8 +27,7 @@ public class Ui {
 
     public void showWelcome() {
         printDivider();
-        String intro = "Hello! I'm MegaBot\n" +
-                "What can I do for you?\n";
+        String intro = "Hello! I'm MegaBot\n" + "What can I do for you?\n";
         System.out.println(intro);
         printDivider();
         System.out.println();

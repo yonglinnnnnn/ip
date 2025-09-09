@@ -1,5 +1,6 @@
 package megabot;
 
+import megabot.exception.InvalidTaskException;
 import megabot.task.Task;
 import megabot.task.ToDo;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,7 +57,7 @@ class TaskListTest {
     }
 
     @Test
-    void deleteTask_validIndex_deletesTaskCorrectly() {
+    void deleteTask_validIndex_deletesTaskCorrectly() throws InvalidTaskException {
         taskList.addTask(task1);
         taskList.addTask(task2);
         taskList.deleteTask(0);
@@ -66,7 +67,7 @@ class TaskListTest {
     }
 
     @Test
-    void deleteTask_invalidIndex_doesNotDeleteAnything() {
+    void deleteTask_invalidIndex_doesNotDeleteAnything() throws InvalidTaskException {
         taskList.addTask(task1);
         int originalSize = taskList.size();
 
