@@ -18,8 +18,11 @@ public class Parser {
      * @return the Command enum corresponding to the user input
      */
     public static Command parseCommand(String userInput) {
+        Command result = Command.fromString(userInput);
 
-        return Command.fromString(userInput);
+        // Post-condition: result should never be null
+        assert result != null : "parseCommand should never return null";
+        return result;
     }
 
     /**
@@ -30,6 +33,7 @@ public class Parser {
      * @return the string with the first word removed, or empty string if no space found
      */
     public static String removeFirstWord(String str) {
+        assert str != null : "Input string cannot be null";
         int index = str.indexOf(' ');
         if (index == -1) {
             return "";

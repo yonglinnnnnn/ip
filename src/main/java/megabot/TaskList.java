@@ -14,13 +14,15 @@ import megabot.task.Task;
  * @version 1.0
  */
 public class TaskList {
-    private ArrayList<Task> tasks;
+    private final ArrayList<Task> tasks;
 
     /**
      * Constructs an empty TaskList.
      */
     public TaskList() {
         this.tasks = new ArrayList<>();
+        assert this.tasks != null : "Task list should be initialized";
+        assert this.tasks.isEmpty() : "New TaskList should be empty";
     }
 
     /**
@@ -29,8 +31,9 @@ public class TaskList {
      * @param tasks the initial list of tasks
      */
     public TaskList(ArrayList<Task> tasks) {
-
+        assert tasks != null : "Input tasks list cannot be null";
         this.tasks = tasks;
+        assert this.tasks == tasks : "Task should reference the input list";
     }
 
     /**
@@ -39,7 +42,7 @@ public class TaskList {
      * @param task the task to be added
      */
     public void addTask(Task task) {
-
+        assert task != null : "Cannot add null task to the list";
         tasks.add(task);
     }
 
@@ -131,7 +134,13 @@ public class TaskList {
      * @return true if the index is valid, false otherwise
      */
     public boolean isValidIndex(int index) {
-        return index >= 0 && index < tasks.size();
+        boolean result = index >= 0 && index < tasks.size();
+        // Invariant check: result should be consistent with bounds
+        if (result) {
+            assert index >= 0 : "Valid index should be non-negative";
+            assert index < tasks.size() : "Valid index should be less than size";
+        }
+        return result;
     }
 
     /**
@@ -142,6 +151,7 @@ public class TaskList {
      * @return an ArrayList of tasks that contain the keyword
      */
     public ArrayList<Task> findTasks(String keyword) {
+        assert keyword != null : "Search keyword cannot be null";
         ArrayList<Task> matchingTasks = new ArrayList<>();
         String lowerKeyword = keyword.toLowerCase();
 

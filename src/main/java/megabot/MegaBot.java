@@ -29,8 +29,11 @@ public class MegaBot {
      * @param filePath the path to the file where tasks are stored
      */
     public MegaBot(String filePath) {
+        assert filePath != null && !filePath.trim().isEmpty() : "File path cannot be null or empty";
+
         ui = new Ui();
         storage = new Storage(filePath);
+
         try {
             tasks = new TaskList(storage.load());
             guiCommandHandler = new GuiCommandHandler(tasks, storage);
@@ -48,6 +51,8 @@ public class MegaBot {
      * @return the response message from MegaBot
      */
     public String getResponse(String input) {
+        assert input != null : "User input cannot be null";
+
         try {
             return guiCommandHandler.handleCommandForGui(input);
         } catch (InvalidTaskException e) {
