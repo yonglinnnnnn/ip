@@ -1,6 +1,2 @@
-T | 1 | read book
-D | 0 | return book | 2023-12-01 0000
-T | 1 | task
-D | 0 | project submission | 2025-09-04
-D | 1 | cs2100 assignment | 2025-09-13
-E | 0 | submission | 2025-09-08-2025-09-09T00:00
+T | 1 | word 
+T | 0 | word search 
