@@ -1,5 +1,6 @@
-package megabot;
+package megabot.gui;
 
+import megabot.TaskList;
 import megabot.task.Deadline;
 import megabot.task.Event;
 import megabot.task.Task;
@@ -8,6 +9,8 @@ import megabot.task.ToDo;
 /**
  * GUI-adapted version of Ui that returns formatted strings instead of printing to console.
  * Reuses all the formatting logic from the original Ui class.
+ * @author Xu Yong Lin
+ * @version 1.0
  */
 public class GuiUi {
 
