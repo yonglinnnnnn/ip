@@ -18,6 +18,7 @@ public class Task {
      * @param task the description of the task
      */
     public Task(String task) {
+        assert task != null : "Task description cannot be null";
         this.task = task;
         this.isDone = false;
     }
@@ -26,6 +27,7 @@ public class Task {
      * Marks the task as completed.
      */
     public void markAsDone() {
+        assert !this.isDone : "Task is already marked as done";
         this.isDone = true;
     }
 
@@ -33,6 +35,7 @@ public class Task {
      * Marks the task as not completed.
      */
     public void markAsUndone() {
+        assert this.isDone : "Task should be done before unmarking";
         this.isDone = false;
     }
 

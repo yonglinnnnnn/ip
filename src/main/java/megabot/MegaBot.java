@@ -28,9 +28,12 @@ public class MegaBot {
      * @param filePath the path to the file where tasks are stored
      */
     public MegaBot(String filePath) {
+        assert filePath != null && !filePath.trim().isEmpty() : "File path cannot be null or empty";
+
         ui = new Ui();
         guiUi = new GuiUi();
         storage = new Storage(filePath);
+
         try {
             tasks = new TaskList(storage.load());
         } catch (InvalidTaskException e) {
@@ -54,6 +57,8 @@ public class MegaBot {
      * @return the response message from MegaBot
      */
     public String getResponse(String input) {
+        assert input != null : "User input cannot be null";
+
         try {
             return handleCommandForGui(input);
         } catch (InvalidTaskException e) {
@@ -72,6 +77,8 @@ public class MegaBot {
      * @throws InvalidTaskException if there's an error processing the command
      */
     private String handleCommandForGui(String userInput) throws InvalidTaskException {
+        assert userInput != null : "User input cannot be null";
+
         if (userInput.equals("bye")) {
             return "Bye. Hope to see you again soon!";
         }
@@ -183,6 +190,8 @@ public class MegaBot {
      * @throws InvalidTaskException if the task number is invalid
      */
     private String handleMarkCommandForGui(String userInput, boolean markAsDone) throws InvalidTaskException {
+        assert userInput != null : "User input cannot be null";
+
         int taskNumber = Parser.parseTaskNumber(userInput);
         int taskIndex = taskNumber - 1; // Convert to 0-based index
 
