@@ -1,8 +1,13 @@
-package megabot;
+package megabot.task;
 
-import megabot.exception.InvalidTaskException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import megabot.Command;
+import megabot.Parser;
+import megabot.exception.InvalidTaskException;
 
 class ParserTest {
 

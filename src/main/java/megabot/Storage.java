@@ -1,17 +1,18 @@
 package megabot;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 import megabot.exception.InvalidTaskException;
 import megabot.task.Deadline;
 import megabot.task.Event;
 import megabot.task.Task;
 import megabot.task.ToDo;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * Handles the loading and saving of tasks to and from a file.
@@ -123,6 +124,8 @@ public class Storage {
                     task = new Event(taskDescription, dateParts[0], dateParts[1]);
                 }
             }
+            break;
+        default:
             break;
         }
 

@@ -1,13 +1,13 @@
 package megabot.task;
 
-import megabot.exception.InvalidTaskException;
-
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
+import megabot.exception.InvalidTaskException;
 
 /**
  * Represents a task with a deadline.
@@ -43,7 +43,8 @@ public class Deadline extends Task {
             try {
                 parsedDueDate = LocalDateTime.of(LocalDate.parse(ddl, dateFormatter), LocalTime.MIDNIGHT);
             } catch (DateTimeParseException e2) {
-                throw new InvalidTaskException("OOPSIE!! The deadline format is invalid. Please use YYYY-MM-DD or YYYY-MM-DD HHMM format.");
+                throw new InvalidTaskException("OOPSIE!! The deadline format is invalid. "
+                        + "Please use YYYY-MM-DD or YYYY-MM-DD HHMM format.");
             }
         }
 

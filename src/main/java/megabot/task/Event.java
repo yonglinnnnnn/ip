@@ -1,10 +1,10 @@
 package megabot.task;
 
-import megabot.exception.InvalidTaskException;
-
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import megabot.exception.InvalidTaskException;
 
 /**
  * Represents a task that occurs during a specific time period.
@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
  * @author Xu Yong Lin
  * @version 1.0
  */
-public class Event extends Deadline{
+public class Event extends Deadline {
     private final String stringStartDateTime;
     private final LocalDate startDateTime;
 
@@ -67,11 +67,11 @@ public class Event extends Deadline{
 
     @Override
     public String toString() {
-        String startDTFormat = this.getStartDateTime().format(DateTimeFormatter.ofPattern("MMM d yyyy"));
-        String endDTFormat = super.getDeadline().format(DateTimeFormatter.ofPattern("MMM d yyyy"));
+        String startDatetimeFormat = this.getStartDateTime().format(DateTimeFormatter.ofPattern("MMM d yyyy"));
+        String endDatetimeFormat = super.getDeadline().format(DateTimeFormatter.ofPattern("MMM d yyyy"));
 
         return "[E]" + this.getStatusIcon() + " " + super.getTask() + " (from: "
-                + startDTFormat + " to: " + endDTFormat + ")";
+                + startDatetimeFormat + " to: " + endDatetimeFormat + ")";
     }
 
     /**
