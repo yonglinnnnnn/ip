@@ -50,6 +50,7 @@ test {
 application {
 //    mainClass.set("megabot.Megabot")
     mainClass.set("Launcher")
+    applicationDefaultJvmArgs = ["-ea"]
 }
 
 
