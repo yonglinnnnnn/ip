@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import megabot.exception.InvalidTaskException;
 import megabot.task.Task;
 import megabot.task.ToDo;
 
