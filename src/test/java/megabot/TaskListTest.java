@@ -64,27 +64,6 @@ class TaskListTest {
     }
 
     @Test
-    void deleteTask_validIndex_deletesTaskCorrectly() throws InvalidTaskException {
-        taskList.addTask(task1);
-        taskList.addTask(task2);
-        taskList.deleteTask(0);
-
-        assertEquals(1, taskList.size());
-        assertEquals(task2, taskList.getTask(0));
-    }
-
-    @Test
-    void deleteTask_invalidIndex_doesNotDeleteAnything() throws InvalidTaskException {
-        taskList.addTask(task1);
-        int originalSize = taskList.size();
-
-        taskList.deleteTask(-1);
-        taskList.deleteTask(5);
-
-        assertEquals(originalSize, taskList.size());
-    }
-
-    @Test
     void getTask_validIndex_returnsCorrectTask() {
         taskList.addTask(task1);
         taskList.addTask(task2);

@@ -87,6 +87,7 @@ public class MegaBot {
         ui.showGoodbye();
         ui.close();
         saveTasksToFile();
+        return;
     }
 
     /**

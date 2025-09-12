@@ -1,4 +1,3 @@
 T | 1 | word 
 T | 0 | word search 
-T | 0 | meowmi 
-T | 0 | meow
+T | 1 | meowmi 

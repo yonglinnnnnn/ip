@@ -58,7 +58,7 @@ public class TaskList {
         if (index < 0 || index > tasks.size()) {
             throw new InvalidTaskException("Please give a valid number to delete the task from!!");
         }
-        if (index < tasks.size()) {
+        if (index > 0 && index < tasks.size()) {
             tasks.remove(index);
         }
     }

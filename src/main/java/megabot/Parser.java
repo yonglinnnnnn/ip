@@ -72,9 +72,14 @@ public class Parser {
      */
     public static String[] parseDeadline(String task) throws InvalidTaskException {
         String[] parts = task.split(" /(?:by) ");
-        boolean lengthMoreThan2 = parts.length != 2;
-        boolean isValidDeadline = parts[0].trim().isEmpty() || parts[1].trim().isEmpty();
-        if (lengthMoreThan2 && isValidDeadline) {
+        boolean isValidDeadline = true;
+        boolean length = parts.length == 2;
+
+        if (length) {
+            isValidDeadline = parts[0].trim().isEmpty() || parts[1].trim().isEmpty();
+        }
+
+        if (!length && isValidDeadline) {
             throw new InvalidTaskException("OOPSIE!! Please use format: deadline <task> /by <date>");
         }
 
@@ -95,9 +100,14 @@ public class Parser {
         }
 
         String[] parts = task.split(" /(?:from|to) ");
-        boolean lengthMoreThan3 = parts.length != 3;
-        boolean isValidEvent = parts[0].trim().isEmpty() || parts[1].trim().isEmpty() || parts[2].trim().isEmpty();
-        if (lengthMoreThan3 && isValidEvent) {
+        boolean length = parts.length == 3;
+        boolean isValidEvent = true;
+
+        if (length) {
+            isValidEvent = parts[0].trim().isEmpty() || parts[1].trim().isEmpty() || parts[2].trim().isEmpty();
+        }
+
+        if (!length && isValidEvent) {
             throw new InvalidTaskException("OOPSIE!! Please use format: event <task> /from <start> /to <end>");
         }
 
