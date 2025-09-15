@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import megabot.Command;
 import megabot.Parser;
 import megabot.Storage;
-import megabot.Ui;
 import megabot.exception.InvalidTaskException;
 import megabot.task.Deadline;
 import megabot.task.Event;
@@ -84,8 +83,10 @@ public class Gui {
         case FIND:
             return handleFindCommand(userInput);
         case UNKNOWN:
+            throw new InvalidTaskException("OOPSIE!! Unknown command type found");
         default:
-            throw new InvalidTaskException("OOPSIE!! Invalid task format :-(");
+            throw new InvalidTaskException("OOPSIE!! I can't create a task because "
+                    + "I don't understand what task you're talking about :-(");
         }
     }
 
@@ -215,8 +216,7 @@ public class Gui {
         try {
             storage.save(tasks.getTasks());
         } catch (IOException e) {
-            Ui ui = new Ui();
-            ui.showError("An error occurred when writing to file: " + e.getMessage());
+            showError("An error occurred when writing to file: " + e.getMessage());
         }
     }
 
@@ -225,5 +225,25 @@ public class Gui {
      */
     public String showLoadingError() {
         return "Error loading tasks from file. Starting with empty task list.";
+    }
+
+    /**
+     * Displays all tasks in the task list with their indices.
+     *
+     * @param tasks the list of tasks to display
+     */
+    public void showTaskList(java.util.ArrayList<Task> tasks) {
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println((i + 1) + "." + tasks.get(i));
+        }
+    }
+
+    /**
+     * Displays an error message to the user.
+     *
+     * @param message the error message to display
+     */
+    public void showError(String message) {
+        System.out.println(message);
     }
 }

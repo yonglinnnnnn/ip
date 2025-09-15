@@ -12,7 +12,7 @@ import megabot.MegaBot;
  */
 public class Main extends Application {
 
-    private final MegaBot megabot = new MegaBot("./data/duke.txt");
+    private final MegaBot megabot = new MegaBot("./data/megabot.txt");
 
     @Override
     public void start(Stage stage) {
