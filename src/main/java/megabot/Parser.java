@@ -71,19 +71,19 @@ public class Parser {
      * @throws InvalidTaskException if the format is incorrect or components are empty
      */
     public static String[] parseDeadline(String task) throws InvalidTaskException {
-        String[] parts = task.split(" /(?:by) ");
+        String[] deadlineParts = task.split(" /(?:by) ");
         boolean isValidDeadline = true;
-        boolean isLength2 = parts.length == 2;
+        boolean isLength2 = deadlineParts.length == 2;
 
         if (isLength2) {
-            isValidDeadline = parts[0].trim().isEmpty() || parts[1].trim().isEmpty();
+            isValidDeadline = deadlineParts[0].trim().isEmpty() || deadlineParts[1].trim().isEmpty();
         }
 
         if (!isLength2 && isValidDeadline) {
             throw new InvalidTaskException("OOPSIE!! Please use format: deadline <task> /by <date>");
         }
 
-        return parts;
+        return deadlineParts;
     }
 
     /**
@@ -99,19 +99,20 @@ public class Parser {
             throw new InvalidTaskException("OOPSIE!! The description of an event cannot be empty.");
         }
 
-        String[] parts = task.split(" /(?:from|to) ");
-        boolean isLength3 = parts.length == 3;
+        String[] eventParts = task.split(" /(?:from|to) ");
+        boolean isLength3 = eventParts.length == 3;
         boolean isValidEvent = true;
 
         if (isLength3) {
-            isValidEvent = parts[0].trim().isEmpty() || parts[1].trim().isEmpty() || parts[2].trim().isEmpty();
+            isValidEvent = eventParts[0].trim().isEmpty() || eventParts[1].trim().isEmpty()
+                    || eventParts[2].trim().isEmpty();
         }
 
         if (!isLength3 && isValidEvent) {
             throw new InvalidTaskException("OOPSIE!! Please use format: event <task> /from <start> /to <end>");
         }
 
-        return parts;
+        return eventParts;
     }
 
     /**

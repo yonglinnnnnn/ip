@@ -4,11 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import megabot.exception.InvalidTaskException;
-import megabot.gui.GuiCommandHandler;
-import megabot.task.Deadline;
-import megabot.task.Event;
+import megabot.gui.Gui;
 import megabot.task.Task;
-import megabot.task.ToDo;
+import megabot.task.TaskList;
 
 /**
  * Main class for the MegaBot task management application.
@@ -21,7 +19,7 @@ public class MegaBot {
     private final Storage storage;
     private TaskList tasks;
     private final Ui ui;
-    private GuiCommandHandler guiCommandHandler;
+    private Gui gui;
 
     /**
      * Constructs a MegaBot instance with the specified file path for task storage.
@@ -36,9 +34,9 @@ public class MegaBot {
 
         try {
             tasks = new TaskList(storage.load());
-            guiCommandHandler = new GuiCommandHandler(tasks, storage);
+            gui = new Gui(tasks, storage);
         } catch (InvalidTaskException e) {
-            ui.showLoadingError();
+            gui.showLoadingError();
             tasks = new TaskList();
         }
     }
@@ -54,7 +52,7 @@ public class MegaBot {
         assert input != null : "User input cannot be null";
 
         try {
-            return guiCommandHandler.handleCommandForGui(input);
+            return gui.handleCommand(input);
         } catch (InvalidTaskException e) {
             return e.getMessage();
         } finally {
@@ -64,18 +62,15 @@ public class MegaBot {
     }
 
     /**
-     * Runs the main application loop.
-     * Displays welcome message, processes user commands, and handles cleanup.
+     * Method to ask for user input
      */
-    public void run() {
-        ui.showWelcome();
-
+    public void processUserCommands() {
         String userInput = ui.readCommand();
 
         while (!userInput.equals("bye")) {
             try {
                 ui.printDivider();
-                handleCommand(userInput);
+                processCommands(userInput);
             } catch (InvalidTaskException e) {
                 ui.showError(e.getMessage());
             } finally {
@@ -83,17 +78,12 @@ public class MegaBot {
                 userInput = ui.readCommand();
             }
         }
-
-        ui.showGoodbye();
-        ui.close();
-        saveTasksToFile();
-        return;
     }
 
     /**
      * Handles user command
      */
-    public void handleCommand(String userInput) throws InvalidTaskException {
+    public void processCommands(String userInput) throws InvalidTaskException {
         Command cmd = Parser.parseCommand(userInput);
 
         switch (cmd) {
@@ -101,122 +91,37 @@ public class MegaBot {
             ui.showTaskList(tasks.getTasks());
             break;
         case TODO:
-            handleTodoCommand(userInput);
+            gui.handleTodoCommand(userInput);
             break;
         case DEADLINE:
-            handleDeadlineCommand(userInput);
+            gui.handleDeadlineCommand(userInput);
             break;
         case EVENT:
-            handleEventCommand(userInput);
+            gui.handleEventCommand(userInput);
             break;
         case MARK:
-            handleMarkCommand(userInput, true);
+            gui.handleMarkCommand(userInput, true);
             break;
         case UNMARK:
-            handleMarkCommand(userInput, false);
+            gui.handleMarkCommand(userInput, false);
             break;
         case DELETE:
-            handleDeleteCommand(userInput);
+            gui.handleDeleteCommand(userInput);
             break;
         case FIND:
-            handleFindCommand(userInput);
+            gui.handleFindCommand(userInput);
             break;
         case UNKNOWN:
+            throw new InvalidTaskException("OOPSIE!! Unknown command type found");
         default:
             throw new InvalidTaskException("OOPSIE!! I can't create a task because "
                 + "I don't understand what task you're talking about :-(");
         }
     }
 
-    /**
-     * Handles the creation of a new todo task.
-     *
-     * @param userInput the user input containing the todo command and description
-     * @throws InvalidTaskException if the todo description is empty
-     */
-    private void handleTodoCommand(String userInput) throws InvalidTaskException {
-        String taskDescription = Parser.removeFirstWord(userInput);
-        if (taskDescription.trim().isEmpty()) {
-            throw new InvalidTaskException("OOPSIE!! The description of todo cannot be empty.");
-        }
 
-        ToDo todo = new ToDo(taskDescription);
-        tasks.addTask(todo);
-        ui.showTaskAdded(todo, tasks.size());
-    }
-
-    /**
-     * Handles the creation of a new deadline task.
-     *
-     * @param userInput the user input containing the deadline command and parameters
-     * @throws InvalidTaskException if the deadline format is invalid
-     */
-    private void handleDeadlineCommand(String userInput) throws InvalidTaskException {
-        String taskContent = Parser.removeFirstWord(userInput);
-        String[] parts = Parser.parseDeadline(taskContent);
-
-        Deadline deadline = new Deadline(parts[0], parts[1]);
-        tasks.addTask(deadline);
-        ui.showTaskAdded(deadline, tasks.size());
-    }
-
-    /**
-     * Handles the creation of a new event task.
-     *
-     * @param userInput the user input containing the event command and parameters
-     * @throws InvalidTaskException if the event format is invalid
-     */
-    private void handleEventCommand(String userInput) throws InvalidTaskException {
-        String taskContent = Parser.removeFirstWord(userInput);
-        String[] parts = Parser.parseEvent(taskContent);
-
-        Event event = new Event(parts[0], parts[1], parts[2]);
-        tasks.addTask(event);
-        ui.showTaskAdded(event, tasks.size());
-    }
-
-    /**
-     * Handles marking or unmarking a task as done.
-     *
-     * @param userInput the user input containing the mark/unmark command and task number
-     * @param markAsDone true to mark as done, false to mark as undone
-     * @throws InvalidTaskException if the task number is invalid
-     */
-
-    private void handleMarkCommand(String userInput, boolean markAsDone) throws InvalidTaskException {
-        int taskNumber = Parser.parseTaskNumber(userInput);
-        int taskIndex = taskNumber - 1; // Convert to 0-based index
-
-        if (!tasks.isValidIndex(taskIndex)) {
-            throw new InvalidTaskException("OOPSIE!! Task number " + taskNumber + " does not exist.");
-        }
-
-        if (markAsDone) {
-            tasks.markTask(taskIndex);
-            ui.showTaskMarked(tasks.getTask(taskIndex));
-        } else {
-            tasks.unmarkTask(taskIndex);
-            ui.showTaskUnmarked(tasks.getTask(taskIndex));
-        }
-    }
-
-    /**
-     * Handles the deletion of a task.
-     *
-     * @param userInput the user input containing the delete command and task number
-     * @throws InvalidTaskException if the task number is invalid
-     */
-    private void handleDeleteCommand(String userInput) throws InvalidTaskException {
-        int taskNumber = Parser.parseTaskNumber(userInput);
-        int taskIndex = taskNumber - 1; // Convert to 0-based index
-
-        if (!tasks.isValidIndex(taskIndex)) {
-            throw new InvalidTaskException("OOPSIE!! Task number " + taskNumber + " does not exist.");
-        }
-
-        Task deletedTask = tasks.getTask(taskIndex);
-        tasks.deleteTask(taskIndex);
-        ui.showTaskDeleted(deletedTask, tasks.size());
+    private int getTaskNumber(String userInput) throws InvalidTaskException {
+        return Parser.parseTaskNumber(userInput);
     }
 
     /**
@@ -241,14 +146,5 @@ public class MegaBot {
         } catch (IOException e) {
             ui.showError("An error occurred when writing to file: " + e.getMessage());
         }
-    }
-
-    /**
-     * Main entry point of the application.
-     *
-     * @param args command line arguments (not used)
-     */
-    public static void main(String[] args) {
-        new MegaBot("data/duke.txt").run();
     }
 }

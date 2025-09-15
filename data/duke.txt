@@ -1,3 +1,4 @@
-T | 1 | word 
-T | 0 | word search 
-T | 1 | meowmi 
+T | 0 | iP
+T | 0 | A-AI
+T | 0 | A-UserGuide
+D | 0 | CS2100 iP submission | 2025-09-19

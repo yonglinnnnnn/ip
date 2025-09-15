@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import megabot.Command;
 import megabot.Parser;
 import megabot.Storage;
-import megabot.TaskList;
 import megabot.Ui;
 import megabot.exception.InvalidTaskException;
 import megabot.task.Deadline;
 import megabot.task.Event;
 import megabot.task.Task;
+import megabot.task.TaskList;
+import megabot.task.TaskService;
 import megabot.task.ToDo;
 
 /**
@@ -20,18 +21,35 @@ import megabot.task.ToDo;
  * @author Xu Yong Lin
  * @version 1.0
  */
-public class GuiCommandHandler {
+public class Gui {
     private final TaskList tasks;
     private final Storage storage;
+    private final TaskService taskService;
 
     /**
-     * Constructor for GuiCommandHandler
+     * Constructor for Gui
      *
      * @param tasks the tasklist
      */
-    public GuiCommandHandler(TaskList tasks, Storage storage) {
+    public Gui(TaskList tasks, Storage storage) {
         this.tasks = tasks;
         this.storage = storage;
+        this.taskService = new TaskService(tasks);
+    }
+
+    /**
+     * Displays the welcome message when the application starts.
+     */
+
+    public static String showWelcome() {
+        return "Hello! I'm MegaBot\n" + "What can I do for you?\n";
+    }
+
+    /**
+     * Displays the goodbye message when the application exits.
+     */
+    public static String showGoodbye() {
+        return "Bye. Hope to see you again soon!";
     }
 
     /**
@@ -41,7 +59,7 @@ public class GuiCommandHandler {
      * @return the response message
      * @throws InvalidTaskException if there's an error processing the command
      */
-    public String handleCommandForGui(String userInput) throws InvalidTaskException {
+    public String handleCommand(String userInput) throws InvalidTaskException {
         if (userInput.equals("bye")) {
             return "Bye. Hope to see you again soon!";
         }
@@ -52,23 +70,22 @@ public class GuiCommandHandler {
         case LIST:
             return getTaskListString();
         case TODO:
-            return handleTodoCommandForGui(userInput);
+            return handleTodoCommand(userInput);
         case DEADLINE:
-            return handleDeadlineCommandForGui(userInput);
+            return handleDeadlineCommand(userInput);
         case EVENT:
-            return handleEventCommandForGui(userInput);
+            return handleEventCommand(userInput);
         case MARK:
-            return handleMarkCommandForGui(userInput, true);
+            return handleMarkCommand(userInput, true);
         case UNMARK:
-            return handleMarkCommandForGui(userInput, false);
+            return handleMarkCommand(userInput, false);
         case DELETE:
-            return handleDeleteCommandForGui(userInput);
+            return handleDeleteCommand(userInput);
         case FIND:
-            return handleFindCommandForGui(userInput);
+            return handleFindCommand(userInput);
         case UNKNOWN:
         default:
-            throw new InvalidTaskException("OOPSIE!! I can't create a task because "
-                    + "I don't understand what task you're talking about :-(");
+            throw new InvalidTaskException("OOPSIE!! Invalid task format :-(");
         }
     }
 
@@ -98,14 +115,9 @@ public class GuiCommandHandler {
      * @return response message
      * @throws InvalidTaskException if the todo description is empty
      */
-    private String handleTodoCommandForGui(String userInput) throws InvalidTaskException {
-        String taskDescription = Parser.removeFirstWord(userInput);
-        if (taskDescription.trim().isEmpty()) {
-            throw new InvalidTaskException("OOPSIE!! The description of todo cannot be empty.");
-        }
+    public String handleTodoCommand(String userInput) throws InvalidTaskException {
+        ToDo todo = taskService.createTodoTask(userInput);
 
-        ToDo todo = new ToDo(taskDescription);
-        tasks.addTask(todo);
         return "Got it. I've added this task:\n" + todo + "\n"
                 + "Now you have " + tasks.size() + " tasks in the list";
     }
@@ -117,12 +129,9 @@ public class GuiCommandHandler {
      * @return response message
      * @throws InvalidTaskException if the deadline format is invalid
      */
-    private String handleDeadlineCommandForGui(String userInput) throws InvalidTaskException {
-        String taskContent = Parser.removeFirstWord(userInput);
-        String[] parts = Parser.parseDeadline(taskContent);
+    public String handleDeadlineCommand(String userInput) throws InvalidTaskException {
+        Deadline deadline = taskService.createDeadlineTask(userInput);
 
-        Deadline deadline = new Deadline(parts[0], parts[1]);
-        tasks.addTask(deadline);
         return "Got it. I've added this task:\n" + deadline + "\n"
                 + "Now you have " + tasks.size() + " tasks in the list";
     }
@@ -134,14 +143,22 @@ public class GuiCommandHandler {
      * @return response message
      * @throws InvalidTaskException if the event format is invalid
      */
-    private String handleEventCommandForGui(String userInput) throws InvalidTaskException {
-        String taskContent = Parser.removeFirstWord(userInput);
-        String[] parts = Parser.parseEvent(taskContent);
+    public String handleEventCommand(String userInput) throws InvalidTaskException {
+        Event event = taskService.createEventTask(userInput);
 
-        Event event = new Event(parts[0], parts[1], parts[2]);
-        tasks.addTask(event);
         return "Got it. I've added this task:\n" + event + "\n"
                 + "Now you have " + tasks.size() + " tasks in the list";
+    }
+
+    private int getTaskIndex(String userInput) throws InvalidTaskException {
+        int taskNumber = Parser.parseTaskNumber(userInput);
+        int taskIndex = taskNumber - 1; // Convert to 0-based index
+
+        if (!tasks.isValidIndex(taskIndex)) {
+            throw new InvalidTaskException("OOPSIE!! Task number " + taskNumber + " does not exist.");
+        }
+
+        return taskIndex;
     }
 
     /**
@@ -152,19 +169,14 @@ public class GuiCommandHandler {
      * @return response message
      * @throws InvalidTaskException if the task number is invalid
      */
-    private String handleMarkCommandForGui(String userInput, boolean markAsDone) throws InvalidTaskException {
-        int taskNumber = Parser.parseTaskNumber(userInput);
-        int taskIndex = taskNumber - 1; // Convert to 0-based index
-
-        if (!tasks.isValidIndex(taskIndex)) {
-            throw new InvalidTaskException("OOPSIE!! Task number " + taskNumber + " does not exist.");
-        }
+    public String handleMarkCommand(String userInput, boolean markAsDone) throws InvalidTaskException {
+        int taskIndex = getTaskIndex(userInput);
 
         if (markAsDone) {
-            tasks.markTask(taskIndex);
+            taskService.markTask(taskIndex);
             return "Nice! I've marked this task as done:\n" + tasks.getTask(taskIndex);
         } else {
-            tasks.unmarkTask(taskIndex);
+            taskService.unmarkTask(taskIndex);
             return "OK, I've marked this task as not done yet:\n" + tasks.getTask(taskIndex);
         }
     }
@@ -176,16 +188,11 @@ public class GuiCommandHandler {
      * @return response message
      * @throws InvalidTaskException if the task number is invalid
      */
-    private String handleDeleteCommandForGui(String userInput) throws InvalidTaskException {
-        int taskNumber = Parser.parseTaskNumber(userInput);
-        int taskIndex = taskNumber - 1; // Convert to 0-based index
+    public String handleDeleteCommand(String userInput) throws InvalidTaskException {
+        int taskIndex = getTaskIndex(userInput);
 
-        if (!tasks.isValidIndex(taskIndex)) {
-            throw new InvalidTaskException("OOPSIE!! Task number " + taskNumber + " does not exist.");
-        }
+        Task deletedTask = taskService.deleteTask(taskIndex);
 
-        Task deletedTask = tasks.getTask(taskIndex);
-        tasks.deleteTask(taskIndex);
         return "Noted. I've removed this task:\n" + deletedTask + "\n"
                 + "Now you have " + tasks.size() + " tasks in the list";
     }
@@ -197,20 +204,8 @@ public class GuiCommandHandler {
      * @return response message with found tasks
      * @throws InvalidTaskException if no keyword is provided
      */
-    private String handleFindCommandForGui(String userInput) throws InvalidTaskException {
-        String keyword = Parser.parseFindKeyword(userInput);
-        ArrayList<Task> foundTasks = tasks.findTasks(keyword);
-
-        if (foundTasks.isEmpty()) {
-            return "No matching tasks found for keyword: " + keyword;
-        } else {
-            StringBuilder sb = new StringBuilder();
-            sb.append("Here are the matching tasks in your list:\n");
-            for (int i = 0; i < foundTasks.size(); i++) {
-                sb.append((i + 1)).append(".").append(foundTasks.get(i)).append("\n");
-            }
-            return sb.toString().trim();
-        }
+    public String handleFindCommand(String userInput) throws InvalidTaskException {
+        return taskService.findTask(userInput);
     }
 
     /**
@@ -223,5 +218,12 @@ public class GuiCommandHandler {
             Ui ui = new Ui();
             ui.showError("An error occurred when writing to file: " + e.getMessage());
         }
+    }
+
+    /**
+     * Displays an error message when tasks cannot be loaded from file.
+     */
+    public String showLoadingError() {
+        return "Error loading tasks from file. Starting with empty task list.";
     }
 }

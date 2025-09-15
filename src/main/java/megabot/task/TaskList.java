@@ -1,11 +1,10 @@
-package megabot;
+package megabot.task;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import megabot.exception.InvalidTaskException;
-import megabot.task.Task;
 
 
 /**
@@ -58,9 +57,7 @@ public class TaskList {
         if (index < 0 || index > tasks.size()) {
             throw new InvalidTaskException("Please give a valid number to delete the task from!!");
         }
-        if (index > 0 && index < tasks.size()) {
-            tasks.remove(index);
-        }
+        tasks.remove(index);
     }
 
     /**
@@ -139,8 +136,8 @@ public class TaskList {
         boolean result = index >= 0 && index < tasks.size();
         // Invariant check: result should be consistent with bounds
         if (result) {
-            assert index >= 0 : "Valid index should be non-negative";
-            assert index < tasks.size() : "Valid index should be less than size";
+            assert index >= 0 : "OOPSIE!! Valid index should be non-negative";
+            assert index < tasks.size() : "OOPSIE!! Valid index should be less than size";
         }
         return result;
     }
@@ -155,9 +152,7 @@ public class TaskList {
     public ArrayList<Task> findTasks(String keyword) {
         assert keyword != null : "Search keyword cannot be null";
 
-        Stream<Task> streamTasks = tasks.stream();
-
-        return (ArrayList<Task>) streamTasks
+        return (ArrayList<Task>) tasks.stream()
                 .filter(task -> task.getTask().toLowerCase().contains(keyword.toLowerCase()))
                 .collect(Collectors.toList());
     }

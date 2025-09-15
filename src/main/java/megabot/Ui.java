@@ -22,27 +22,6 @@ public class Ui {
     }
 
     /**
-     * Displays the welcome message when the application starts.
-     */
-
-    public void showWelcome() {
-        printDivider();
-        String intro = "Hello! I'm MegaBot\n" + "What can I do for you?\n";
-        System.out.println(intro);
-        printDivider();
-        System.out.println();
-    }
-
-    /**
-     * Displays the goodbye message when the application exits.
-     */
-    public void showGoodbye() {
-        printDivider();
-        System.out.println("Bye. Hope to see you again soon!");
-        printDivider();
-    }
-
-    /**
      * Reads a line of user input from the console.
      *
      * @return the user input as a string
@@ -58,57 +37,6 @@ public class Ui {
      */
     public void showError(String message) {
         System.out.println(message);
-    }
-
-    /**
-     * Displays an error message when tasks cannot be loaded from file.
-     */
-    public void showLoadingError() {
-        System.out.println("Error loading tasks from file. Starting with empty task list.");
-    }
-
-    /**
-     * Displays a confirmation message when a task is successfully added.
-     *
-     * @param task the task that was added
-     * @param totalTasks the total number of tasks after addition
-     */
-    public void showTaskAdded(Task task, int totalTasks) {
-        System.out.println("Got it. I've added this task:");
-        System.out.println(task);
-        showTaskCount(totalTasks);
-    }
-
-    /**
-     * Displays a confirmation message when a task is marked as done.
-     *
-     * @param task the task that was marked
-     */
-    public void showTaskMarked(Task task) {
-        System.out.println("Nice! I've marked this task as done:\n");
-        System.out.println(task);
-    }
-
-    /**
-     * Displays a confirmation message when a task is unmarked.
-     *
-     * @param task the task that was unmarked
-     */
-    public void showTaskUnmarked(Task task) {
-        System.out.println("OK, I've marked this task as not done yet:\n");
-        System.out.println(task);
-    }
-
-    /**
-     * Displays a confirmation message when a task is deleted.
-     *
-     * @param task the task that was deleted
-     * @param totalTasks the total number of tasks after deletion
-     */
-    public void showTaskDeleted(Task task, int totalTasks) {
-        System.out.println("Noted. I've removed this task:");
-        System.out.println(task);
-        showTaskCount(totalTasks);
     }
 
     /**

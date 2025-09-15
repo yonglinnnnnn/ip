@@ -22,6 +22,13 @@ import megabot.task.ToDo;
  * @version 1.0
  */
 public class Storage {
+    private static final int MIN_TASK_PARTS = 3;
+    private static final int TASK_PARTS_WITH_DATE = 4;
+    private static final String DONE_STATUS = "1";
+    private static final int STATUS_INDEX = 1;
+    private static final int DESCRIPTION_INDEX = 2;
+    private static final int DATE_INDEX = 3;
+
     private final String filePath;
 
     /**
@@ -97,42 +104,44 @@ public class Storage {
      */
     private Task parseTaskFromFile(String line) throws InvalidTaskException {
         String[] parts = line.split(" \\| ");
-        if (parts.length < 3) {
-            return null; // Skip invalid lines
+        if (parts.length < MIN_TASK_PARTS) {
+            throw new InvalidTaskException("There is invalid task found from the file!");
         }
 
         String taskType = parts[0];
-        boolean isDone = parts[1].equals("1");
-        String taskDescription = parts[2];
+        boolean isDone = parts[STATUS_INDEX].equals(DONE_STATUS);
+        String taskDescription = parts[DESCRIPTION_INDEX];
 
-        Task task = null;
-
-        switch (taskType) {
-        case "T":
-            task = new ToDo(taskDescription);
-            break;
-        case "D":
-            if (parts.length >= 4) {
-                task = new Deadline(taskDescription, parts[3]);
-            }
-            break;
-        case "E":
-            if (parts.length >= 4) {
-                // Parse the duration string (start-end format)
-                String[] dateParts = parts[3].split("-");
-                if (dateParts.length >= 2) {
-                    task = new Event(taskDescription, dateParts[0], dateParts[1]);
-                }
-            }
-            break;
-        default:
-            break;
-        }
+        Task task = createTaskByType(taskType, taskDescription, parts);
 
         if (task != null && isDone) {
             task.markAsDone();
         }
 
         return task;
+    }
+
+    private Task createTaskByType(String taskType, String description, String[] parts) throws InvalidTaskException {
+        switch (taskType) {
+        case "T":
+            return new ToDo(description);
+        case "D":
+            if (parts.length >= TASK_PARTS_WITH_DATE) {
+                return new Deadline(description, parts[3]);
+            }
+            break;
+        case "E":
+            if (parts.length >= TASK_PARTS_WITH_DATE) {
+                // parse the duration string (start-end format)
+                String[] dateParts = parts[DATE_INDEX].split("-");
+                if (dateParts.length >= 2) {
+                    return new Event(description, dateParts[0], dateParts[STATUS_INDEX]);
+                }
+            }
+            break;
+        default:
+            throw new InvalidTaskException("An invalid task was found in the file!");
+        }
+        return null;
     }
 }
