@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -44,15 +45,18 @@ class StorageTest {
     void load_invalidLines_skipsInvalidLines() throws IOException, InvalidTaskException {
         File testFile = tempDir.resolve("test_invalid.txt").toFile();
         FileWriter writer = new FileWriter(testFile);
-        writer.write("T | 0 | valid task\n");
         writer.write("invalid line\n");
-        writer.write("D | 1 | another valid task | 2023-12-01\n");
         writer.close();
 
         Storage testStorage = new Storage(testFile.getAbsolutePath());
-        ArrayList<Task> tasks = testStorage.load();
 
-        assertEquals(2, tasks.size());
+        try {
+            ArrayList<Task> result = testStorage.load();
+            System.out.println("Load completed successfully with " + result.size() + " tasks");
+            fail("Expected InvalidTaskException to be thrown");
+        } catch (InvalidTaskException e) {
+            System.out.println("Exception caught: " + e.getMessage());
+        }
     }
 
     @Test

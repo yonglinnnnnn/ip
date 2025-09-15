@@ -66,6 +66,7 @@ public class Storage {
         } catch (FileNotFoundException e) {
             // If file doesn't exist, return empty list
             // The file will be created when we save tasks
+            System.out.println("File not found!! Please try again");
         }
 
         return tasks;
