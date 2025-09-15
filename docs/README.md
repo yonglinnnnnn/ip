@@ -1,6 +1,6 @@
 # MegaBot User Guide
 
-// Product screenshot goes here
+![MegaBot Interface](MegaBot_Screenshot.png)
 
 MegaBot is a friendly task management chatbot that helps you organize your todos, deadlines, and events. With its intuitive GUI interface and persistent storage, MegaBot makes task management simple and efficient!
 
