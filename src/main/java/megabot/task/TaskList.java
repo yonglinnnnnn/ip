@@ -2,7 +2,6 @@ package megabot.task;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import megabot.exception.InvalidTaskException;
 
