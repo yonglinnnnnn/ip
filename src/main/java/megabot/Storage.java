@@ -67,6 +67,8 @@ public class Storage {
             // If file doesn't exist, return empty list
             // The file will be created when we save tasks
             System.out.println("File not found!! Please try again");
+        } catch (MegabotException e2) {
+            System.out.println("Invalid task found. Please check file");
         }
 
         return tasks;
@@ -105,6 +107,10 @@ public class Storage {
      */
     private Task parseTaskFromFile(String line) throws MegabotException {
         String[] parts = line.split(" \\| ");
+        if (parts.length == 0) {
+
+        }
+
         if (parts.length < MIN_TASK_PARTS) {
             throw new MegabotException("There is invalid task found from the file!");
         }
