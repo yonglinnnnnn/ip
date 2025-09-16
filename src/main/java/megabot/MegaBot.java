@@ -7,7 +7,7 @@ import megabot.gui.Gui;
 import megabot.task.TaskList;
 
 /**
- * Main class for the MegaBot task management application.
+ * megabot.Main class for the MegaBot task management application.
  * Manages the interaction between the user interface, task storage, and task operations.
  *
  * @author Xu Yong Lin

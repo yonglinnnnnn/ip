@@ -1,3 +1,5 @@
+package megabot;
+
 import javafx.application.Application;
 
 /**
