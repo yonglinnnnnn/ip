@@ -38,9 +38,28 @@ jobs:
       - name: Clean Gradle
         run: ./gradlew clean
 
+      - name: Set permissions
+        run: sudo chmod -R 777 /tmp
+
+      - name: Check temp directory
+        run: echo $TMPDIR
+
       - name: Build and check with Gradle
         run: ./gradlew check
+
+      - name: Install dos2unix on Linux
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y dos2unix
 
       - name: Install dos2unix on macOS
         if: runner.os == 'macOS'
         run: brew install dos2unix
+
+      - name: Wait before cleanup
+        run: sleep 5
+
+      - name: Clean up temp files
+        run: rm -rf /tmp/*
+
+      - name: Post-test actions
+        run: echo "Tests completed"
