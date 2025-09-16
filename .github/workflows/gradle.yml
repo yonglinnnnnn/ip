@@ -35,6 +35,9 @@ jobs:
           java-version: '17'
           java-package: jdk+fx
 
+      - name: Clean Gradle
+        run: ./gradlew clean
+
       - name: Build and check with Gradle
         run: ./gradlew check
 
