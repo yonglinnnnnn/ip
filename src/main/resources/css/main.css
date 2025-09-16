@@ -5,7 +5,7 @@
 
 .text-field {
     -fx-background-color: #FEFCD6;
-    -fx-font: 20px "Arial";
+    -fx-font: 14px "Arial";
 }
 
 .button {
@@ -14,12 +14,12 @@
 }
 
 .button:hover {
-    -fx-background-color:cyan;
+    -fx-background-color: #FFBE12;
     -fx-font-size: 18px;
 }
 
 .button:pressed {
-    -fx-background-color:orange;
+    -fx-background-color:#FEF3B3;
     -fx-font-size: 20px;
 }
 

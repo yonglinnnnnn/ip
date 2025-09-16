@@ -19,6 +19,7 @@
                    onAction="#handleUserInput"
                    prefHeight="41.0"
                    prefWidth="324.0"
+                   promptText="Add something to your list"
                    AnchorPane.bottomAnchor="1.0"
                    AnchorPane.leftAnchor="0.0"
                    AnchorPane.rightAnchor="76.0" />
@@ -30,6 +31,7 @@
                 prefHeight="41.0"
                 prefWidth="76.0"
                 text="Send"
+
                 AnchorPane.bottomAnchor="1.0"
                 AnchorPane.rightAnchor="0.0" />
         <ScrollPane fx:id="scrollPane"
