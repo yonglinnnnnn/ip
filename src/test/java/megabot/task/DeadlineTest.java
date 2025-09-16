@@ -8,13 +8,13 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
-import megabot.exception.InvalidTaskException;
+import megabot.exception.MegabotException;
 
 
 class DeadlineTest {
 
     @Test
-    void constructor_validDateTimeFormat_createsDeadlineCorrectly() throws InvalidTaskException {
+    void constructor_validDateTimeFormat_createsDeadlineCorrectly() throws MegabotException {
         Deadline deadline = new Deadline("submit assignment", "2023-12-01 1400");
 
         assertEquals("submit assignment", deadline.getTask());
@@ -23,7 +23,7 @@ class DeadlineTest {
     }
 
     @Test
-    void constructor_validDateOnlyFormat_createsDeadlineCorrectly() throws InvalidTaskException {
+    void constructor_validDateOnlyFormat_createsDeadlineCorrectly() throws MegabotException {
         Deadline deadline = new Deadline("submit assignment", "2023-12-01");
 
         assertEquals("submit assignment", deadline.getTask());
@@ -33,62 +33,62 @@ class DeadlineTest {
 
     @Test
     void constructor_invalidDateFormat_throwsException() {
-        assertThrows(InvalidTaskException.class, () ->
+        assertThrows(MegabotException.class, () ->
                 new Deadline("submit assignment", "invalid date"));
-        assertThrows(InvalidTaskException.class, () ->
+        assertThrows(MegabotException.class, () ->
                 new Deadline("submit assignment", "2023-13-01"));
-        assertThrows(InvalidTaskException.class, () ->
+        assertThrows(MegabotException.class, () ->
                 new Deadline("submit assignment", "01-12-2023"));
     }
 
     @Test
-    void constructor_emptyTask_createsDeadlineCorrectly() throws InvalidTaskException {
+    void constructor_emptyTask_createsDeadlineCorrectly() throws MegabotException {
         Deadline deadline = new Deadline("", "2023-12-01");
         assertEquals("", deadline.getTask());
     }
 
     @Test
-    void toString_unmarkedDeadline_returnsCorrectFormat() throws InvalidTaskException {
+    void toString_unmarkedDeadline_returnsCorrectFormat() throws MegabotException {
         Deadline deadline = new Deadline("submit assignment", "2023-12-01 1400");
         assertEquals("[D][ ] submit assignment (by: Dec 1 2023 14:00)", deadline.toString());
     }
 
     @Test
-    void toString_markedDeadline_returnsCorrectFormat() throws InvalidTaskException {
+    void toString_markedDeadline_returnsCorrectFormat() throws MegabotException {
         Deadline deadline = new Deadline("submit assignment", "2023-12-01 1400");
         deadline.markAsDone();
         assertEquals("[D][X] submit assignment (by: Dec 1 2023 14:00)", deadline.toString());
     }
 
     @Test
-    void formatData_unmarkedDeadline_returnsCorrectFormat() throws InvalidTaskException {
+    void formatData_unmarkedDeadline_returnsCorrectFormat() throws MegabotException {
         Deadline deadline = new Deadline("submit assignment", "2023-12-01 1400");
         assertEquals("D | 0 | submit assignment | 2023-12-01 1400", deadline.formatData());
     }
 
     @Test
-    void formatData_markedDeadline_returnsCorrectFormat() throws InvalidTaskException {
+    void formatData_markedDeadline_returnsCorrectFormat() throws MegabotException {
         Deadline deadline = new Deadline("submit assignment", "2023-12-01 1400");
         deadline.markAsDone();
         assertEquals("D | 1 | submit assignment | 2023-12-01 1400", deadline.formatData());
     }
 
     @Test
-    void getDeadline_returnsCorrectLocalDateTime() throws InvalidTaskException {
+    void getDeadline_returnsCorrectLocalDateTime() throws MegabotException {
         Deadline deadline = new Deadline("test task", "2023-12-25 0900");
         LocalDateTime expected = LocalDateTime.of(2023, 12, 25, 9, 0);
         assertEquals(expected, deadline.getDeadline());
     }
 
     @Test
-    void getStringDeadline_returnsOriginalString() throws InvalidTaskException {
+    void getStringDeadline_returnsOriginalString() throws MegabotException {
         String dateString = "2023-12-01 1400";
         Deadline deadline = new Deadline("test task", dateString);
         assertEquals(dateString, deadline.getStringDeadline());
     }
 
     @Test
-    void markAsDone_deadline_worksCorrectly() throws InvalidTaskException {
+    void markAsDone_deadline_worksCorrectly() throws MegabotException {
         Deadline deadline = new Deadline("test task", "2023-12-01");
         deadline.markAsDone();
         assertTrue(deadline.getIsDone());

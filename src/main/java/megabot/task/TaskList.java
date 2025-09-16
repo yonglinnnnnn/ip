@@ -3,7 +3,7 @@ package megabot.task;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import megabot.exception.InvalidTaskException;
+import megabot.exception.MegabotException;
 
 
 /**
@@ -50,11 +50,11 @@ public class TaskList {
      * Deletes a task at the specified index.
      *
      * @param index the index of the task to delete (0-based)
-     * @throws InvalidTaskException if the index is out of bounds
+     * @throws MegabotException if the index is out of bounds
      */
-    public void deleteTask(int index) throws InvalidTaskException {
+    public void deleteTask(int index) throws MegabotException {
         if (index < 0 || index > tasks.size()) {
-            throw new InvalidTaskException("Please give a valid number to delete the task from!!");
+            throw new MegabotException("Please give a valid number to delete the task from!!");
         }
         tasks.remove(index);
     }

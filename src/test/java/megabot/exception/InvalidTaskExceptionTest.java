@@ -11,7 +11,7 @@ class InvalidTaskExceptionTest {
     @Test
     void constructor_validMessage_createsExceptionCorrectly() {
         String message = "Test error message";
-        InvalidTaskException exception = new InvalidTaskException(message);
+        MegabotException exception = new MegabotException(message);
 
         assertEquals(message, exception.getMessage());
         assertEquals(message, exception.toString());
@@ -20,7 +20,7 @@ class InvalidTaskExceptionTest {
     @Test
     void constructor_emptyMessage_createsExceptionCorrectly() {
         String message = "";
-        InvalidTaskException exception = new InvalidTaskException(message);
+        MegabotException exception = new MegabotException(message);
 
         assertEquals(message, exception.getMessage());
         assertEquals(message, exception.toString());
@@ -28,7 +28,7 @@ class InvalidTaskExceptionTest {
 
     @Test
     void constructor_nullMessage_createsExceptionCorrectly() {
-        InvalidTaskException exception = new InvalidTaskException(null);
+        MegabotException exception = new MegabotException(null);
 
         assertNull(exception.getMessage());
         assertNull(exception.toString());
@@ -37,14 +37,14 @@ class InvalidTaskExceptionTest {
     @Test
     void toString_returnsMessageCorrectly() {
         String message = "OOPSIE!! Something went wrong";
-        InvalidTaskException exception = new InvalidTaskException(message);
+        MegabotException exception = new MegabotException(message);
 
         assertEquals(message, exception.toString());
     }
 
     @Test
     void isInstanceOfException_returnsTrue() {
-        InvalidTaskException exception = new InvalidTaskException("test");
+        MegabotException exception = new MegabotException("test");
         assertTrue(exception instanceof Exception);
     }
 }

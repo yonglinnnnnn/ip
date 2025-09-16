@@ -8,13 +8,13 @@ package megabot.exception;
  * @author Xu Yong Lin
  * @version 1.0
  */
-public class InvalidTaskException extends Exception {
+public class MegabotException extends Exception {
     /**
      * Constructs an InvalidTaskException with the specified error message.
      *
      * @param msg the error message describing what went wrong
      */
-    public InvalidTaskException(String msg) {
+    public MegabotException(String msg) {
         super(msg);
     }
 

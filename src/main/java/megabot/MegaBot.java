@@ -2,7 +2,7 @@ package megabot;
 
 import java.io.IOException;
 
-import megabot.exception.InvalidTaskException;
+import megabot.exception.MegabotException;
 import megabot.gui.Gui;
 import megabot.task.TaskList;
 
@@ -31,7 +31,7 @@ public class MegaBot {
         try {
             tasks = new TaskList(storage.load());
             gui = new Gui(tasks, storage);
-        } catch (InvalidTaskException e) {
+        } catch (MegabotException e) {
             gui.showLoadingError();
             tasks = new TaskList();
         }
@@ -49,7 +49,7 @@ public class MegaBot {
 
         try {
             return gui.handleCommand(input);
-        } catch (InvalidTaskException e) {
+        } catch (MegabotException e) {
             return e.getMessage();
         } finally {
             // Save tasks after each command (for GUI)

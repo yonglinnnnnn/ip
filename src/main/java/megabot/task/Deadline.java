@@ -7,7 +7,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-import megabot.exception.InvalidTaskException;
+import megabot.exception.MegabotException;
 
 /**
  * Represents a task with a deadline.
@@ -26,9 +26,9 @@ public class Deadline extends Task {
      *
      * @param task the description of the deadline task
      * @param ddl the deadline in format "yyyy-MM-dd" or "yyyy-MM-dd HHmm"
-     * @throws InvalidTaskException if the deadline format is invalid
+     * @throws MegabotException if the deadline format is invalid
      */
-    public Deadline(String task, String ddl) throws InvalidTaskException {
+    public Deadline(String task, String ddl) throws MegabotException {
         super(task);
         this.stringDeadline = ddl;
 
@@ -43,7 +43,7 @@ public class Deadline extends Task {
             try {
                 parsedDueDate = LocalDateTime.of(LocalDate.parse(ddl, dateFormatter), LocalTime.MIDNIGHT);
             } catch (DateTimeParseException e2) {
-                throw new InvalidTaskException("OOPSIE!! The deadline format is invalid. "
+                throw new MegabotException("OOPSIE!! The deadline format is invalid. "
                         + "Please use YYYY-MM-DD or YYYY-MM-DD HHMM format.");
             }
         }

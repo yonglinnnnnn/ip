@@ -1,6 +1,6 @@
 package megabot;
 
-import megabot.exception.InvalidTaskException;
+import megabot.exception.MegabotException;
 
 /**
  * Parses user input and extracts meaningful components for command execution.
@@ -47,18 +47,18 @@ public class Parser {
      *
      * @param userInput the user input containing a command and task number
      * @return the parsed task number
-     * @throws InvalidTaskException if no task number is provided or if it's not a valid integer
+     * @throws MegabotException if no task number is provided or if it's not a valid integer
      */
-    public static int parseTaskNumber(String userInput) throws InvalidTaskException {
+    public static int parseTaskNumber(String userInput) throws MegabotException {
         String[] str = userInput.split(" ");
         if (str.length < 2) {
-            throw new InvalidTaskException("OOPSIE!! Please specify a task number.");
+            throw new MegabotException("OOPSIE!! Please specify a task number.");
         }
 
         try {
             return Integer.parseInt(str[1]);
         } catch (NumberFormatException e) {
-            throw new InvalidTaskException("OOPSIE!! Please provide a valid task number.");
+            throw new MegabotException("OOPSIE!! Please provide a valid task number.");
         }
     }
 
@@ -68,9 +68,9 @@ public class Parser {
      *
      * @param task the task portion of the deadline command
      * @return a String array where [0] is description and [1] is the deadline
-     * @throws InvalidTaskException if the format is incorrect or components are empty
+     * @throws MegabotException if the format is incorrect or components are empty
      */
-    public static String[] parseDeadline(String task) throws InvalidTaskException {
+    public static String[] parseDeadline(String task) throws MegabotException {
         String[] deadlineParts = task.split(" /(?:by) ");
         boolean isValidDeadline = true;
         boolean isLength2 = deadlineParts.length == 2;
@@ -80,7 +80,7 @@ public class Parser {
         }
 
         if (!isLength2 && isValidDeadline) {
-            throw new InvalidTaskException("OOPSIE!! Please use format: deadline <task> /by <date>");
+            throw new MegabotException("OOPSIE!! Please use format: deadline <task> /by <date>");
         }
 
         return deadlineParts;
@@ -92,11 +92,11 @@ public class Parser {
      *
      * @param task the task portion of the event command
      * @return a String array where [0] is description, [1] is start, and [2] is end
-     * @throws InvalidTaskException if the format is incorrect or components are empty
+     * @throws MegabotException if the format is incorrect or components are empty
      */
-    public static String[] parseEvent(String task) throws InvalidTaskException {
+    public static String[] parseEvent(String task) throws MegabotException {
         if (task.trim().isEmpty()) {
-            throw new InvalidTaskException("OOPSIE!! The description of an event cannot be empty.");
+            throw new MegabotException("OOPSIE!! The description of an event cannot be empty.");
         }
 
         String[] eventParts = task.split(" /(?:from|to) ");
@@ -109,7 +109,7 @@ public class Parser {
         }
 
         if (!isLength3 && isValidEvent) {
-            throw new InvalidTaskException("OOPSIE!! Please use format: event <task> /from <start> /to <end>");
+            throw new MegabotException("OOPSIE!! Please use format: event <task> /from <start> /to <end>");
         }
 
         return eventParts;
@@ -121,12 +121,12 @@ public class Parser {
      *
      * @param userInput the user input containing the find command and keyword
      * @return the keyword to search for
-     * @throws InvalidTaskException if no keyword is provided
+     * @throws MegabotException if no keyword is provided
      */
-    public static String parseFindKeyword(String userInput) throws InvalidTaskException {
+    public static String parseFindKeyword(String userInput) throws MegabotException {
         String keyword = removeFirstWord(userInput);
         if (keyword.trim().isEmpty()) {
-            throw new InvalidTaskException("OOPSIE!! Please specify a keyword to search for.");
+            throw new MegabotException("OOPSIE!! Please specify a keyword to search for.");
         }
         return keyword.trim();
     }

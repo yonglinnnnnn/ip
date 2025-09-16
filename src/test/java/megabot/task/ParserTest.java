@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import megabot.Command;
 import megabot.Parser;
-import megabot.exception.InvalidTaskException;
+import megabot.exception.MegabotException;
 
 class ParserTest {
 
@@ -89,7 +89,7 @@ class ParserTest {
     }
 
     @Test
-    void parseTaskNumber_validInput_returnsCorrectNumber() throws InvalidTaskException {
+    void parseTaskNumber_validInput_returnsCorrectNumber() throws MegabotException {
         assertEquals(1, Parser.parseTaskNumber("mark 1"));
         assertEquals(5, Parser.parseTaskNumber("delete 5"));
         assertEquals(10, Parser.parseTaskNumber("unmark 10"));
@@ -97,13 +97,13 @@ class ParserTest {
 
     @Test
     void parseTaskNumber_invalidInput_throwsException() {
-        assertThrows(InvalidTaskException.class, () -> Parser.parseTaskNumber("mark"));
-        assertThrows(InvalidTaskException.class, () -> Parser.parseTaskNumber("delete"));
-        assertThrows(InvalidTaskException.class, () -> Parser.parseTaskNumber("mark abc"));
+        assertThrows(MegabotException.class, () -> Parser.parseTaskNumber("mark"));
+        assertThrows(MegabotException.class, () -> Parser.parseTaskNumber("delete"));
+        assertThrows(MegabotException.class, () -> Parser.parseTaskNumber("mark abc"));
     }
 
     @Test
-    void parseDeadline_validInput_returnsCorrectParts() throws InvalidTaskException {
+    void parseDeadline_validInput_returnsCorrectParts() throws MegabotException {
         String[] result = Parser.parseDeadline("submit assignment /by Sunday");
         assertEquals(2, result.length);
         assertEquals("submit assignment", result[0]);
@@ -112,14 +112,14 @@ class ParserTest {
 
     @Test
     void parseDeadline_invalidInput_throwsException() {
-        assertThrows(InvalidTaskException.class, () -> Parser.parseDeadline("submit assignment"));
-        assertThrows(InvalidTaskException.class, () -> Parser.parseDeadline("/by Sunday"));
-        assertThrows(InvalidTaskException.class, () -> Parser.parseDeadline("submit assignment /by"));
-        assertThrows(InvalidTaskException.class, () -> Parser.parseDeadline(""));
+        assertThrows(MegabotException.class, () -> Parser.parseDeadline("submit assignment"));
+        assertThrows(MegabotException.class, () -> Parser.parseDeadline("/by Sunday"));
+        assertThrows(MegabotException.class, () -> Parser.parseDeadline("submit assignment /by"));
+        assertThrows(MegabotException.class, () -> Parser.parseDeadline(""));
     }
 
     @Test
-    void parseEvent_validInput_returnsCorrectParts() throws InvalidTaskException {
+    void parseEvent_validInput_returnsCorrectParts() throws MegabotException {
         String[] result = Parser.parseEvent("project meeting /from Mon /to Tue");
         assertEquals(3, result.length);
         assertEquals("project meeting", result[0]);
@@ -129,10 +129,10 @@ class ParserTest {
 
     @Test
     void parseEvent_invalidInput_throwsException() {
-        assertThrows(InvalidTaskException.class, () -> Parser.parseEvent("project meeting"));
-        assertThrows(InvalidTaskException.class, () -> Parser.parseEvent("project meeting /from Mon"));
-        assertThrows(InvalidTaskException.class, () -> Parser.parseEvent("/from Mon /to Tue"));
-        assertThrows(InvalidTaskException.class, () -> Parser.parseEvent("project meeting /from /to Tue"));
-        assertThrows(InvalidTaskException.class, () -> Parser.parseEvent(""));
+        assertThrows(MegabotException.class, () -> Parser.parseEvent("project meeting"));
+        assertThrows(MegabotException.class, () -> Parser.parseEvent("project meeting /from Mon"));
+        assertThrows(MegabotException.class, () -> Parser.parseEvent("/from Mon /to Tue"));
+        assertThrows(MegabotException.class, () -> Parser.parseEvent("project meeting /from /to Tue"));
+        assertThrows(MegabotException.class, () -> Parser.parseEvent(""));
     }
 }

@@ -17,7 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import megabot.exception.InvalidTaskException;
+import megabot.exception.MegabotException;
 import megabot.task.Deadline;
 import megabot.task.Task;
 import megabot.task.ToDo;
@@ -36,13 +36,13 @@ class StorageTest {
     }
 
     @Test
-    void load_nonExistentFile_returnsEmptyList() throws InvalidTaskException {
+    void load_nonExistentFile_returnsEmptyList() throws MegabotException {
         ArrayList<Task> tasks = storage.load();
         assertTrue(tasks.isEmpty());
     }
 
     @Test
-    void load_invalidLines_skipsInvalidLines() throws IOException, InvalidTaskException {
+    void load_invalidLines_skipsInvalidLines() throws IOException, MegabotException {
         File testFile = tempDir.resolve("test_invalid.txt").toFile();
         FileWriter writer = new FileWriter(testFile);
         writer.write("invalid line\n");
@@ -54,7 +54,7 @@ class StorageTest {
             ArrayList<Task> result = testStorage.load();
             System.out.println("Load completed successfully with " + result.size() + " tasks");
             fail("Expected InvalidTaskException to be thrown");
-        } catch (InvalidTaskException e) {
+        } catch (MegabotException e) {
             System.out.println("Exception caught: " + e.getMessage());
         }
     }
@@ -71,7 +71,7 @@ class StorageTest {
     }
 
     @Test
-    void save_taskList_writesCorrectFormat() throws IOException, InvalidTaskException {
+    void save_taskList_writesCorrectFormat() throws IOException, MegabotException {
         ArrayList<Task> tasks = new ArrayList<>();
         ToDo todo = new ToDo("read book");
         Deadline deadline = new Deadline("submit assignment", "2023-12-01");

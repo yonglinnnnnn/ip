@@ -4,7 +4,7 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import megabot.exception.InvalidTaskException;
+import megabot.exception.MegabotException;
 
 /**
  * Represents a task that occurs during a specific time period.
@@ -24,16 +24,16 @@ public class Event extends Deadline {
      * @param task the description of the event task
      * @param startDT the start date in format "yyyy-MM-dd"
      * @param ddl the end date in format "yyyy-MM-dd" or "yyyy-MM-dd HHmm"
-     * @throws InvalidTaskException if either date format is invalid
+     * @throws MegabotException if either date format is invalid
      */
-    public Event(String task, String startDT, String ddl) throws InvalidTaskException {
+    public Event(String task, String startDT, String ddl) throws MegabotException {
         super(task, ddl);
         this.stringStartDateTime = startDT;
 
         try {
             this.startDateTime = LocalDate.parse(startDT, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         } catch (DateTimeException e) {
-            throw new InvalidTaskException("OOPSIE!! The start date format is invalid. Please use YYYY-MM-DD format.");
+            throw new MegabotException("OOPSIE!! The start date format is invalid. Please use YYYY-MM-DD format.");
         }
     }
 

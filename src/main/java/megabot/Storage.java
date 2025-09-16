@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import megabot.exception.InvalidTaskException;
+import megabot.exception.MegabotException;
 import megabot.task.Deadline;
 import megabot.task.Event;
 import megabot.task.Task;
@@ -45,9 +45,9 @@ public class Storage {
      * If the file does not exist, returns an empty list.
      *
      * @return an ArrayList of tasks loaded from the file
-     * @throws InvalidTaskException if there is an error parsing tasks from the file
+     * @throws MegabotException if there is an error parsing tasks from the file
      */
-    public ArrayList<Task> load() throws InvalidTaskException {
+    public ArrayList<Task> load() throws MegabotException {
         ArrayList<Task> tasks = new ArrayList<>();
 
         try {
@@ -101,12 +101,12 @@ public class Storage {
      *
      * @param line the line of text to parse
      * @return the parsed Task object, or null if the line is invalid
-     * @throws InvalidTaskException if there is an error creating the task
+     * @throws MegabotException if there is an error creating the task
      */
-    private Task parseTaskFromFile(String line) throws InvalidTaskException {
+    private Task parseTaskFromFile(String line) throws MegabotException {
         String[] parts = line.split(" \\| ");
         if (parts.length < MIN_TASK_PARTS) {
-            throw new InvalidTaskException("There is invalid task found from the file!");
+            throw new MegabotException("There is invalid task found from the file!");
         }
 
         String taskType = parts[0];
@@ -122,7 +122,7 @@ public class Storage {
         return task;
     }
 
-    private Task createTaskByType(String taskType, String description, String[] parts) throws InvalidTaskException {
+    private Task createTaskByType(String taskType, String description, String[] parts) throws MegabotException {
         switch (taskType) {
         case "T":
             return new ToDo(description);
@@ -141,7 +141,7 @@ public class Storage {
             }
             break;
         default:
-            throw new InvalidTaskException("An invalid task was found in the file!");
+            throw new MegabotException("An invalid task was found in the file!");
         }
         return null;
     }

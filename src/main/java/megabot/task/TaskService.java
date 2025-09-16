@@ -3,7 +3,7 @@ package megabot.task;
 import java.util.ArrayList;
 
 import megabot.Parser;
-import megabot.exception.InvalidTaskException;
+import megabot.exception.MegabotException;
 
 /**
  * Task Service class to handle the creation of task(s)
@@ -23,13 +23,13 @@ public class TaskService {
      *
      * @param userInput     User input
      * @return Todo
-     * @throws InvalidTaskException if the task number is invalid
+     * @throws MegabotException if the task number is invalid
      */
-    public ToDo createTodoTask(String userInput) throws InvalidTaskException {
+    public ToDo createTodoTask(String userInput) throws MegabotException {
         String taskDescription = Parser.removeFirstWord(userInput);
 
         if (taskDescription.trim().isEmpty()) {
-            throw new InvalidTaskException("OOPSIE!! The description of todo cannot be empty.");
+            throw new MegabotException("OOPSIE!! The description of todo cannot be empty.");
         }
 
         ToDo todo = new ToDo(taskDescription);
@@ -43,9 +43,9 @@ public class TaskService {
      *
      * @param userInput     User input
      * @return Todo
-     * @throws InvalidTaskException if the task number is invalid
+     * @throws MegabotException if the task number is invalid
      */
-    public Deadline createDeadlineTask(String userInput) throws InvalidTaskException {
+    public Deadline createDeadlineTask(String userInput) throws MegabotException {
         String taskContent = Parser.removeFirstWord(userInput);
         String[] parts = Parser.parseDeadline(taskContent);
 
@@ -60,9 +60,9 @@ public class TaskService {
      *
      * @param userInput     User input
      * @return Todo
-     * @throws InvalidTaskException if the task number is invalid
+     * @throws MegabotException if the task number is invalid
      */
-    public Event createEventTask(String userInput) throws InvalidTaskException {
+    public Event createEventTask(String userInput) throws MegabotException {
         String taskContent = Parser.removeFirstWord(userInput);
         String[] parts = Parser.parseEvent(taskContent);
 
@@ -91,9 +91,9 @@ public class TaskService {
     /**
      * Deletes task
      * @param taskIndex index of task in taskList
-     * @throws InvalidTaskException if the task number is invalid
+     * @throws MegabotException if the task number is invalid
      */
-    public Task deleteTask(int taskIndex) throws InvalidTaskException {
+    public Task deleteTask(int taskIndex) throws MegabotException {
         Task deletedTask = tasks.getTask(taskIndex);
         tasks.deleteTask(taskIndex);
 
@@ -105,7 +105,7 @@ public class TaskService {
      * @param userInput
      * @return
      */
-    public String findTask(String userInput) throws InvalidTaskException {
+    public String findTask(String userInput) throws MegabotException {
         String keyword = Parser.parseFindKeyword(userInput);
         ArrayList<Task> foundTasks = tasks.findTasks(keyword);
 
