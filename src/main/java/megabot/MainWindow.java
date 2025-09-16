@@ -1,14 +1,16 @@
+package megabot;
+
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-import megabot.MegaBot;
 import megabot.gui.Gui;
 
 /**
@@ -56,7 +58,10 @@ public class MainWindow extends AnchorPane {
 
         if (input.equalsIgnoreCase("bye")) {
             String exitMessage = Gui.showGoodbye();
-            dialogContainer.getChildren().add(DialogBox.getMegaBotDialog(exitMessage, megabotImage));
+            dialogContainer.getChildren().addAll(
+                    DialogBox.getUserDialog(input, userImage),
+                    DialogBox.getMegaBotDialog(exitMessage, megabotImage)
+            );
             PauseTransition pause = new PauseTransition(Duration.seconds(1));
             pause.setOnFinished(event -> {
                 Platform.exit();
