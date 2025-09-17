@@ -5,8 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import megabot.Command;
-import megabot.Parser;
+import megabot.parser.Parser;
 import megabot.exception.MegabotException;
 
 class ParserTest {

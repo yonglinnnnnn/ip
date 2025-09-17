@@ -1,5 +1,6 @@
-package megabot;
+package megabot.parser;
 
+import megabot.task.Command;
 import megabot.exception.MegabotException;
 
 /**

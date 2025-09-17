@@ -3,8 +3,8 @@ package megabot.gui;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import megabot.Command;
-import megabot.Parser;
+import megabot.task.Command;
+import megabot.parser.Parser;
 import megabot.Storage;
 import megabot.exception.MegabotException;
 import megabot.task.Deadline;

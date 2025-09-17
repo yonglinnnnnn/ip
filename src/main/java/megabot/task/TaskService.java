@@ -2,7 +2,7 @@ package megabot.task;
 
 import java.util.ArrayList;
 
-import megabot.Parser;
+import megabot.parser.Parser;
 import megabot.exception.MegabotException;
 
 /**
