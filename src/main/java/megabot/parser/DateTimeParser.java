@@ -165,7 +165,8 @@ public class DateTimeParser {
      * @param endDateTime the end datetime
      * @throws MegabotException if start datetime is after end datetime
      */
-    public static void validateDateTimeRange(LocalDateTime startDateTime, LocalDateTime endDateTime) throws MegabotException {
+    public static void validateDateTimeRange(LocalDateTime startDateTime, LocalDateTime endDateTime)
+            throws MegabotException {
         if (startDateTime.isAfter(endDateTime)) {
             throw new MegabotException("OOPSIE!! Start time cannot be after end time. "
                     + "Start: " + startDateTime + ", End: " + endDateTime);

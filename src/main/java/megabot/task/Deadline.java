@@ -1,11 +1,7 @@
 package megabot.task;
 
-import java.time.DateTimeException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 import megabot.exception.MegabotException;
 import megabot.parser.DateTimeParser;
@@ -26,7 +22,7 @@ public class Deadline extends Task {
      * Constructs a Deadline task with the specified description and deadline.
      *
      * @param task the description of the deadline task
-     * @param deadlineStr the deadline in format "yyyy-MM-dd" or "yyyy-MM-dd HHmm"
+     * @param deadlineStr the deadline (eg. "yyyy-MM-dd" or "yyyy-MM-dd HHmm")
      * @throws MegabotException if the deadline format is invalid
      */
     public Deadline(String task, String deadlineStr) throws MegabotException {
@@ -49,22 +45,6 @@ public class Deadline extends Task {
             // Re-throw with context about which field failed
             throw new MegabotException("OOPSIE!! Error parsing deadline: " + e.getMessage());
         }
-
-        //        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-        //        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        //
-        //        LocalDateTime parsedDueDate;
-        //
-        //        try {
-        //            parsedDueDate = LocalDateTime.parse(ddl, dateTimeFormatter);
-        //        } catch (DateTimeException e) {
-        //            try {
-        //                parsedDueDate = LocalDateTime.of(LocalDate.parse(ddl, dateFormatter), LocalTime.MIDNIGHT);
-        //            } catch (DateTimeParseException e2) {
-        //                throw new MegabotException("OOPSIE!! The deadline format is invalid. "
-        //                        + "Please use YYYY-MM-DD or YYYY-MM-DD HHMM format.");
-        //            }
-        //        }
     }
 
     /**

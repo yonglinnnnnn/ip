@@ -1,9 +1,10 @@
 package megabot.task;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
-import megabot.parser.Parser;
 import megabot.exception.MegabotException;
+import megabot.parser.Parser;
 
 /**
  * Task Service class to handle the creation of task(s)
@@ -12,10 +13,16 @@ import megabot.exception.MegabotException;
  * @version 1.0
  */
 public class TaskService {
+    private static final Logger LOGGER = Logger.getLogger(TaskService.class.getName());
     private final TaskList tasks;
 
+    /**
+     * Constructor to initialise the List of tasks to perform the Create, View, and Delete of tasks
+     * @param tasks TaskList which contains all tasks
+     */
     public TaskService(TaskList tasks) {
         this.tasks = tasks;
+        LOGGER.info("TaskService initialized with " + tasks.size() + " existing tasks");
     }
 
     /**
@@ -101,9 +108,9 @@ public class TaskService {
     }
 
     /**
-     * Finds tasks with matching keyword
-     * @param userInput
-     * @return
+     * Find tasks with matching keyword
+     * @param userInput     Word to find in TaskList
+     * @return              String that contains all the tasks that contains the keyword
      */
     public String findTask(String userInput) throws MegabotException {
         String keyword = Parser.parseFindKeyword(userInput);

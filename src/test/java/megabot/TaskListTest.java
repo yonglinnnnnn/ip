@@ -3,6 +3,7 @@ package megabot;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
@@ -130,12 +131,12 @@ class TaskListTest {
     }
 
     @Test
-    void isValidIndex_invalidIndices_returnsFalse() {
+    void isValidIndex_invalidIndices_returnsAssertionError() {
         taskList.addTask(task1);
 
-        assertFalse(taskList.isValidIndex(-1));
-        assertFalse(taskList.isValidIndex(1));
-        assertFalse(taskList.isValidIndex(5));
+        assertThrows(AssertionError.class, () -> taskList.isValidIndex(-1));
+        assertThrows(AssertionError.class, () -> taskList.isValidIndex(1));
+        assertThrows(AssertionError.class, () -> taskList.isValidIndex(5));
     }
 
     @Test

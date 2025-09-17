@@ -134,9 +134,9 @@ public class TaskList {
     public boolean isValidIndex(int index) {
         boolean result = index >= 0 && index < tasks.size();
         // Invariant check: result should be consistent with bounds
-        if (result) {
-            assert index <= 0 : "OOPSIE!! Valid index should be non-negative";
-            assert index < tasks.size() : "OOPSIE!! Valid index should be less than size";
+        if (!result) {
+            assert index < 0 : "OOPSIE!! Valid index should be non-negative";
+            assert index > tasks.size() : "OOPSIE!! Valid index should be less than size";
         }
         return result;
     }
