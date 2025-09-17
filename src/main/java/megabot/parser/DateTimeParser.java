@@ -65,7 +65,7 @@ public class DateTimeParser {
         // First try datetime formats
         for (DateTimeFormatter formatter : DATETIME_FORMATTERS) {
             try {
-                return LocalDateTime.parse(trimmedInput, formatter);
+                return LocalDateTime.parse(trimmedInput.replace("T", " "), formatter);
             } catch (DateTimeParseException e) {
                 // Continue to next format
             }

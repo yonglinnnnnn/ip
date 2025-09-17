@@ -91,7 +91,10 @@ public class Event extends Task {
      * @return the duration string for file storage
      */
     public String getTaskDuration() {
-        return this.startDateTime + "-" + this.endDateTime;
+        String startDatetimeFormat = this.getStartDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        String endDatetimeFormat = this.getEndDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+
+        return startDatetimeFormat + " to " + endDatetimeFormat;
     }
 
     /**

@@ -1,7 +1,7 @@
 package megabot.parser;
 
-import megabot.task.Command;
 import megabot.exception.MegabotException;
+import megabot.task.Command;
 
 /**
  * Parses user input and extracts meaningful components for command execution.
@@ -18,7 +18,15 @@ public class Parser {
      * @param userInput the raw user input string
      * @return the Command enum corresponding to the user input
      */
-    public static Command parseCommand(String userInput) {
+    public static Command parseCommand(String userInput) throws MegabotException {
+        if (userInput == null) {
+            throw new MegabotException("OOPSIE!! Input cannot be null.");
+        }
+
+        if (userInput.trim().isEmpty()) {
+            throw new MegabotException("OOPSIE!! Please enter a command.");
+        }
+
         Command result = Command.fromString(userInput);
 
         // Post-condition: result should never be null
@@ -33,8 +41,11 @@ public class Parser {
      * @param str the input string
      * @return the string with the first word removed, or empty string if no space found
      */
-    public static String removeFirstWord(String str) {
-        assert str != null : "Input string cannot be null";
+    public static String removeFirstWord(String str) throws MegabotException {
+        if (str == null) {
+            throw new MegabotException("OOPSIE!! Input string cannot be null.");
+        }
+
         int index = str.indexOf(' ');
         if (index == -1) {
             return "";
@@ -51,7 +62,12 @@ public class Parser {
      * @throws MegabotException if no task number is provided or if it's not a valid integer
      */
     public static int parseTaskNumber(String userInput) throws MegabotException {
+        if (userInput == null || userInput.trim().isEmpty()) {
+            throw new MegabotException("OOPSIE!! Input cannot be empty.");
+        }
+
         String[] str = userInput.split(" ");
+
         if (str.length < 2) {
             throw new MegabotException("OOPSIE!! Please specify a task number.");
         }
@@ -72,19 +88,52 @@ public class Parser {
      * @throws MegabotException if the format is incorrect or components are empty
      */
     public static String[] parseDeadline(String task) throws MegabotException {
-        String[] deadlineParts = task.split(" /(?:by) ");
-        boolean isValidDeadline = true;
-        boolean isLength2 = deadlineParts.length == 2;
-
-        if (isLength2) {
-            isValidDeadline = deadlineParts[0].trim().isEmpty() || deadlineParts[1].trim().isEmpty();
+        if (task == null || task.trim().isEmpty()) {
+            throw new MegabotException("OOPSIE!! Deadline task description cannot be empty. "
+                    + "Format: deadline <description> /by <date>");
         }
 
-        if (!isLength2 && isValidDeadline) {
-            throw new MegabotException("OOPSIE!! Please use format: deadline <task> /by <date>");
+        //        // Check if /by keyword exists
+        //        if (!task.contains("/by")) {
+        //            throw new MegabotException("OOPSIE!! Missing '/by' keyword. "
+        //                    + "Format: deadline <description> /by <date>");
+        //        }
+        //
+        //        String[] deadlineParts = task.split(" /(?:by) ");
+        //        boolean isValidDeadline = true;
+        //        boolean isLength2 = deadlineParts.length == 2;
+        //
+        //        if (isLength2) {
+        //            isValidDeadline = deadlineParts[0].trim().isEmpty() || deadlineParts[1].trim().isEmpty();
+        //        }
+        //
+        //        if (!isLength2 && isValidDeadline) {
+        //            throw new MegabotException("OOPSIE!! Please use format: deadline <task> /by <date>");
+        //        }
+        //
+        //        return deadlineParts;
+
+        String[] deadlineParts = task.split("\\s*/by\\s*", 2);
+
+        if (deadlineParts.length != 2) {
+            throw new MegabotException("OOPSIE!! Invalid deadline format. "
+                    + "Format: deadline <description> /by <date>");
         }
 
-        return deadlineParts;
+        String description = deadlineParts[0].trim();
+        String deadline = deadlineParts[1].trim();
+
+        if (description.isEmpty()) {
+            throw new MegabotException("OOPSIE!! Task description cannot be empty. "
+                    + "Format: deadline <description> /by <date>");
+        }
+
+        if (deadline.isEmpty()) {
+            throw new MegabotException("OOPSIE!! Deadline date cannot be empty. "
+                    + "Format: deadline <description> /by <date>");
+        }
+
+        return new String[]{description, deadline};
     }
 
     /**
