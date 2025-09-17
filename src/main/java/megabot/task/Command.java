@@ -1,4 +1,4 @@
-package megabot;
+package megabot.task;
 
 /**
  * Enumeration of all possible commands that can be executed in the MegaBot application.
