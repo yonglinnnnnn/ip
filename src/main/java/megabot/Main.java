@@ -24,6 +24,7 @@ public class Main extends Application {
             stage.setScene(scene);
             stage.setMinHeight(220);
             stage.setMinWidth(417);
+            stage.setTitle("MegaBot");
             fxmlLoader.<MainWindow>getController().setMegaBot(megabot); // inject the instance
             stage.show();
         } catch (IOException e) {
