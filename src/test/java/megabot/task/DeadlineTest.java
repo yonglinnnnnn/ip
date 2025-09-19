@@ -86,7 +86,7 @@ class DeadlineTest {
 
         assertTrue(result.contains("[D][ ]"));
         assertTrue(result.contains("submit assignment"));
-        assertTrue(result.contains("(by: Dec 1 2023 14:00)"));
+        assertTrue(result.contains("(by: Dec 1 2023 2:00 pm)"));
         assertTrue(result.contains("⚠ OVERDUE")); // Status indicator
     }
 
@@ -98,7 +98,7 @@ class DeadlineTest {
 
         assertTrue(result.contains("[D][X]"));
         assertTrue(result.contains("submit assignment"));
-        assertTrue(result.contains("(by: Dec 1 2023 14:00)"));
+        assertTrue(result.contains("(by: Dec 1 2023 2:00 pm)"));
         assertTrue(result.contains("✓ Completed")); // Status indicator
     }
 
