@@ -52,8 +52,11 @@ public class Event extends Task {
 
         // Validate date range - start date should not be after end date
         if (this.startDateTime.isAfter(this.endDateTime)) {
-            throw new MegabotException("OOPSIE!! Start date (" + this.startDateTime
-                    + ") cannot be after end date (" + this.endDateTime + ").");
+            String startDatetimeFormat = formatDateTime(this.getStartDateTime());
+            String endDatetimeFormat = formatDateTime(this.getEndDateTime());
+
+            throw new MegabotException("OOPSIE!! Start date (" + startDatetimeFormat
+                    + ") cannot be after end date (" + endDatetimeFormat + ").");
         }
     }
 
@@ -91,10 +94,14 @@ public class Event extends Task {
      * @return the duration string for file storage
      */
     public String getTaskDuration() {
-        String startDatetimeFormat = this.getStartDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-        String endDatetimeFormat = this.getEndDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        String startDatetimeFormat = formatDateTime(this.getStartDateTime());
+        String endDatetimeFormat = formatDateTime(this.getEndDateTime());
 
         return startDatetimeFormat + " to " + endDatetimeFormat;
+    }
+
+    private String formatDateTime(LocalDateTime dt) {
+        return dt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd h:mm a"));
     }
 
     /**
@@ -135,8 +142,8 @@ public class Event extends Task {
 
     @Override
     public String toString() {
-        String startDatetimeFormat = this.getStartDateTime().format(DateTimeFormatter.ofPattern("MMM dd yyyy h:mm a"));
-        String endDatetimeFormat = this.getEndDateTime().format(DateTimeFormatter.ofPattern("MMM dd yyyy h:mm a"));
+        String startDatetimeFormat = formatDateTime(this.getStartDateTime());
+        String endDatetimeFormat = formatDateTime(this.getEndDateTime());
         String statusEmoji = getEventStatus();
 
         return "[E]" + this.getStatusIcon() + " " + super.getTask() + " (from: "
