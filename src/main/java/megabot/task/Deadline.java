@@ -96,7 +96,7 @@ public class Deadline extends Task {
     public String toString() {
         String statusEmoji = getDeadlineStatus();
         return "[D]" + this.getStatusIcon() + " " + super.getTask() + " (by: "
-                + this.getDeadline().format(DateTimeFormatter.ofPattern("MMM d yyyy HH:mm"))
+                + this.getDeadline().format(DateTimeFormatter.ofPattern("MMM d yyyy h:mm a"))
                 + ") " + statusEmoji;
     }
 
