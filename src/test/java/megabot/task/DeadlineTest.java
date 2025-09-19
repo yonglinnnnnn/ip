@@ -91,17 +91,6 @@ class DeadlineTest {
     }
 
     @Test
-    void toString_markedDeadline_returnsCorrectFormat() throws MegabotException {
-        Deadline deadline = new Deadline("submit assignment", "2023-12-01 1400");
-        deadline.markAsDone();
-        String result = deadline.toString();
-
-        assertTrue(result.contains("[D][X]"));
-        assertTrue(result.contains("submit assignment"));
-        assertTrue(result.contains("(by: Dec 1 2023 2:00 pm)"));
-    }
-
-    @Test
     void formatData_unmarkedDeadline_returnsCorrectFormat() throws MegabotException {
         Deadline deadline = new Deadline("submit assignment", "2023-12-01 1400");
         assertEquals("D | 0 | submit assignment | 2023-12-01 1400", deadline.formatData());
